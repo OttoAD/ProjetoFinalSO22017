@@ -77,3 +77,43 @@ O processo principal é o “despachante", este deve exibir uma mensagem de identif
 - Utilização de drivers (bool)
 - O processo deve exibir alguma mensagem que indique sua execução
 
+---- METODOLOGIA DO GRUPO ----
+- JDK 1.8: http://www.oracle.com/technetwork/pt/java/javase/downloads/jdk8-downloads-2133151.html
+- Eclipse IDE: http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/oxygen/1/eclipse-java-oxygen-1-win32-x86_64.zip
+- SonarQube(baixar plugin pro eclipse também): https://www.sonarqube.org/
+- Git(procurar pelo plugin para o eclipse): https://git-scm.com/downloads
+- Maven(já vem no eclipse, mas por via de duvidas): https://maven.apache.org/download.cgi
+
+Tutorial de instalação JAVA E MAVEN:
+
+WINDOWS 7:
+
+- 1 - Baixar a JDK(Java Development Kit)
+- 2 - Baixar os binários do Maven
+- 3 - Painel de Controle -> Sistema e Segurança -> Sistema -> Configurações Avançadas do Sistema -> Variáveis de Ambiente
+- 4 - New Path em Variáveis do Sistema -> nome: JAVA_HOME -> apontar para o diretório jdk(C:\Program Files\Java\jdk1.8)
+- 5 - New Path em Variáveis do Sistema -> nome: CLASSPATH -> apontar para %JAVA_HOME%
+- 6 - Na variável PATH, adicionar ao final: %JAVA_HOME%\bin
+- 7 - New Path em Variáveis do Sistema -> nome: MAVEN_HOME -> apontar para o diretório do maven(não o bin, a raiz)
+- 8 - Na variável PATH, adicionar ao final: %MAVEN_HOME%\bin
+- 9 - no prompt(cmd), digitar maven -version, javac e java -version pra checar as instalações
+
+UBUNTU 16:
+JDK:
+- 1 - sudo apt-get update
+- 2 - sudo apt-get install default-jre
+- 3 - sudo apt-get install default-jdk
+- 4 - java -version
+- 5 - javac
+- 6 - sudo apt-get install openjdk-7-jre
+- 7 - sudo apt-get install openjdk-<VERSAO>-jdk (versão pode ser 6, 7 ou 8 no momento)
+- 8 - export JAVA_HOME=/usr/lib/jvm/java-8-oracle/?
+- 9 - export CLASSPATH=JAVA_HOME/lib/:$CLASSPATH
+    export PATH=$JAVA_HOME/bin/:$PATH
+    export M2_HOME=/usr/share/maven/
+    export M2=$M2_HOME/bin
+    export PATH=$M2:$PATH
+- 10 - echo $JAVA_HOME
+
+Se nada acima der certo
+OBS: CTRL H revela arquivos escondidos; arquivos etc/environment tem que ser alterado manualmente e em "pasta pessoal"->bashrc tem que colocar o export M2_HOME=/
