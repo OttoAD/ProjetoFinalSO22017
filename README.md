@@ -24,9 +24,9 @@ Recursos de E/S:
 - 1 modem
 - 2 SATA
 
--Sem preempção
--Processos de tempo real não fazem uso
--Cada recurso seja alocado para um proceso por vez
+- Sem preempção
+- Processos de tempo real não fazem uso
+- Cada recurso seja alocado para um proceso por vez
 
 Arquivos:
 - criar e deletar
