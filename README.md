@@ -1,102 +1,104 @@
 #PROJETO FINAL - SISTEMAS OPERACIONAIS
 
------ ESPECIFICA«√O -----
+----- ESPECIFICA√á√ÉO -----
 
-- Gerenciador de processos: agrupar em quatro nÌveis de prioridade
-- Gerenciador de memÛria: garantir que um processo n„o acesse regi„o de memÛria de outro
-- Gerenciador de arquivos: garantir liberaÁ„o e alocaÁ„o, assim como uso exclusivo dos dispositivos
-- Gerenciador de E/S: criar e deletar arquivos de acordo com o modelo de alocaÁ„o determinado
+- Gerenciador de processos: agrupar em quatro n√≠veis de prioridade
+- Gerenciador de mem√≥ria: garantir que um processo n√£o acesse regi√£o de mem√≥ria de outro
+- Gerenciador de arquivos: criar e deletar arquivos de acordo com o modelo de aloca√ß√£o determinado
+- Gerenciador de E/S: garantir libera√ß√£o e aloca√ß√£o, assim como uso exclusivo dos dispositivos
 
 Filas: valores menores = maiores prioridades
-- processos de tempo real (maior pioridade, FIFO sem preempÁ„o)
-- processos de usu·rios (trÍs filas com prioridades distintas e realimentaÁ„o, usar aging para evitar starvation)
+- processos de tempo real (prioridade 0, uma fila, FIFO sem preemp√ß√£o)
+- processos de usu√°rios (tr√™s filas com prioridades distintas e realimenta√ß√£o, usar aging ou outra t√©cnica para evitar starvation)
+- quantum de 1 segundo
+- No m√°ximo 1000 processos nas filas
+- Recomenda-se usar uma fila global (ver figura 1)
 
-- No m·ximo 1000 processos nas filas
-- Recomenda-se usar uma filha global (ver figura 1)
-
-MemÛria: conjunto de blocos contiguos. N„o ser· utilizado swap ou p·ginas.
-- fixa de 1024 blocos com 64
-- cada bloco tem 1mb
+Mem√≥ria: conjunto de blocos contiguos. N√£o ser√° utilizado swap ou p√°ginas.
+- fixa de 1024 blocos
+- 64 blocos para processos de tempo real
+- 960 blocos para processos de usu√°rio
+- cada bloco tem 4 bytes (um int)
 
 Recursos de E/S:
-- scanner
+- 1 scanner
 - 2 impressores
 - 1 modem
 - 2 SATA
 
-- Sem preempÁ„o
-- Processos de tempo real n„o fazem uso
+- Sem preemp√ß√£o
+- Processos de tempo real n√£o fazem uso
 - Cada recurso seja alocado para um proceso por vez
+- Deve ser utilizada alguma t√©cnica para o gerenciamento (sem√°foro, etc)
 
 Arquivos:
 - criar e deletar
-- alocaÁ„o contÌgua
-- arquivo deve ser tratado como uma unidade de manipulaÁ„o
+- aloca√ß√£o cont√≠gua
+- arquivo deve ser tratado como uma unidade de manipula√ß√£o
 - first fit
-- processos de tempo real podem fazer tudo, atÈ com processos de terceiros
-- entrada È um TXT: contÈm a quantidade total de blocos no disco, a especificaÁ„o dos segmentos ocupados por cada arquivo, as operaÁıes a serem realizadas por cada processo
-- deve mostrar na tela do computador um mapa com a atual ocupaÁ„o do disco, descrevendo quais arquivos est„o em cada bloco, e quais s„o os blocos vazios (identificados por 0)
+- processos de tempo real podem fazer tudo, at√© com processos de terceiros
+- entrada √© um TXT: cont√©m a quantidade total de blocos no disco, a especifica√ß√£o dos segmentos ocupados por cada arquivo, as opera√ß√µes a serem realizadas por cada processo
+- deve mostrar na tela do computador um mapa com a atual ocupa√ß√£o do disco, descrevendo quais arquivos est√£o em cada bloco, e quais s√£o os blocos vazios (identificados por 0)
 
 
 ESTRUTURA:
-- MÛdulo de Processos ñ classes e estruturas de dados relativas ao processo. Basicamente, mantÈm informaÁıes especÌficas do processo.
-
-- MÛdulo de Filas ñ mantÈm as interfaces e funÁıes que operam sobre os processos
-- MÛdulo de MemÛria ñ provÍ uma interface de abstraÁ„o de memÛria RAM
-- MÛdulo de Recurso ñ trata a alocaÁ„o e liberaÁ„o dos recursos de E/S para os processos
-- MÛdulo de Arquivos ñ trata as operaÁıes create e delete sobre os arquivos
+- M√≥dulo de Processos ‚Äì classes e estruturas de dados relativas ao processo. Basicamente, mant√©m informa√ß√µes espec√≠ficas do processo.
+- M√≥dulo de Filas ‚Äì mant√©m as interfaces e fun√ß√µes que operam sobre os processos
+- M√≥dulo de Mem√≥ria ‚Äì prov√™ uma interface de abstra√ß√£o de mem√≥ria RAM
+- M√≥dulo de Recurso ‚Äì trata a aloca√ß√£o e libera√ß√£o dos recursos de E/S para os processos
+- M√≥dulo de Arquivos ‚Äì trata as opera√ß√µes create e delete sobre os arquivos
 
 INTERFACE
 Entrada:
 
-Ler os arquivos .txt: contendo as informaÁıes dos processos a serem criados e descriÁ„o das operaÁıes a serem realizadas pelo sistema de arquivos
+Ler os arquivos .txt: contendo as informa√ß√µes dos processos a serem criados e descri√ß√£o das opera√ß√µes a serem realizadas pelo sistema de arquivos
 
 Processos
-- cada linha contÈm as informaÁıes de um ˙nico processo
-- linha: <tempo de inicializaÁ„o>, <prioridade>, <tempo de processador>, <blocos em memÛria>, <n˙merocÛdigo da impressora requisitada>, <requisiÁ„o do scanner>, <requisiÁ„o do modem>, <n˙merocÛdigo do disco>
+- cada linha cont√©m as informa√ß√µes de um √∫nico processo
+- linha: <tempo de inicializa√ß√£o>, <prioridade>, <tempo de processador>, <blocos em mem√≥ria>, <n√∫meroc√≥digo da impressora requisitada>, <requisi√ß√£o do scanner>, <requisi√ß√£o do modem>, <n√∫meroc√≥digo do disco>
 
 Arquivos
-- Haver· a quantidade total de blocos no disco, a quantidade de segmentos ocupados, a identificaÁ„o de quais arquivos j· est„o gravados no disco, a localizaÁ„o dos blocos usados por cada arquivo, a identificaÁ„o de qual processo efetuar· cada operaÁ„o, a identificaÁ„o das operaÁıes, sendo cÛdigo 0 para criar um arquivo, e cÛdigo 1 para deletar um arquivo.
-AlÈm disso, para as operaÁıes de criaÁ„o deve constar o nome do arquivo a ser criado, e a quantidade de blocos ocupada pelo arquivo. Por outro lado, na operaÁ„o de deletar um arquivo, deve constar apenas o nome do arquivo a ser deletado.
+- Haver√° a quantidade total de blocos no disco, a quantidade de segmentos ocupados, a identifica√ß√£o de quais arquivos j√° est√£o gravados no disco, a localiza√ß√£o dos blocos usados por cada arquivo, a identifica√ß√£o de qual processo efetuar√° cada opera√ß√£o, a identifica√ß√£o das opera√ß√µes, sendo c√≥digo 0 para criar um arquivo, e c√≥digo 1 para deletar um arquivo.
+Al√©m disso, para as opera√ß√µes de cria√ß√£o deve constar o nome do arquivo a ser criado, e a quantidade de blocos ocupada pelo arquivo. Por outro lado, na opera√ß√£o de deletar um arquivo, deve constar apenas o nome do arquivo a ser deletado.
 
 - Linha 1: Quantidade de blocos do disco
 - Linha 2: Quantidade de segmentos ocupados no disco (n);
-- A partir da Linha 3 atÈ Linha n + 2: arquivo (a ser identificado por uma letra), n˙mero do primeiro bloco gravado, quantidade de blocos ocupados por este arquivo;
-- A partir da linha n + 3: cada linha representa uma operaÁ„o a ser efetivada pelo sistema de arquivos do pseudo-SO. Para isso, essas linhas v„o conter: <ID_Processo>, <CÛdigo_OperaÁ„o>, <Nome_arquivo>, <se_operacaoCriar_numero_blocos>.
+- A partir da Linha 3 at√© Linha n + 2: arquivo (a ser identificado por uma letra), n√∫mero do primeiro bloco gravado, quantidade de blocos ocupados por este arquivo;
+- A partir da linha n + 3: cada linha representa uma opera√ß√£o a ser efetivada pelo sistema de arquivos do pseudo-SO. Para isso, essas linhas v√£o conter: <ID_Processo>, <C√≥digo_Opera√ß√£o>, <Nome_arquivo>, <se_operacaoCriar_numero_blocos>.
 
 
-SaÌda:
-O processo principal È o ìdespachante", este deve exibir uma mensagem de identificaÁ„o contendo as seguintes informaÁıes:
+Sa√≠da:
+O processo principal √© o ‚Äúdespachante", este deve exibir uma mensagem de identifica√ß√£o contendo as seguintes informa√ß√µes:
 
 - PID (int)
 - Prioridade do processo (int)
-- Offset da memÛria (int)
-- Quantidade de blocos alocados na memÛria (int)
-- UtilizaÁ„o de impressora (bool)
-- UtilizaÁ„o de scanner (bool)
-- UtilizaÁ„o de drivers (bool)
-- O processo deve exibir alguma mensagem que indique sua execuÁ„o
+- Offset da mem√≥ria (int)
+- Quantidade de blocos alocados na mem√≥ria (int)
+- Utiliza√ß√£o de impressora (bool)
+- Utiliza√ß√£o de scanner (bool)
+- Utiliza√ß√£o de drivers (bool)
+- O processo deve exibir alguma mensagem que indique sua execu√ß√£o
 
 ---- METODOLOGIA DO GRUPO ----
 - JDK 1.8: http://www.oracle.com/technetwork/pt/java/javase/downloads/jdk8-downloads-2133151.html
 - Eclipse IDE: http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/oxygen/1/eclipse-java-oxygen-1-win32-x86_64.zip
-- SonarQube(baixar plugin pro eclipse tambÈm): https://www.sonarqube.org/
+- SonarQube(baixar plugin pro eclipse tamb√©m): https://www.sonarqube.org/
 - Git(procurar pelo plugin para o eclipse): https://git-scm.com/downloads
-- Maven(j· vem no eclipse, mas por via de duvidas): https://maven.apache.org/download.cgi
+- Maven(j√° vem no eclipse, mas por via de duvidas): https://maven.apache.org/download.cgi
 
-Tutorial de instalaÁ„o JAVA E MAVEN:
+Tutorial de instala√ß√£o JAVA E MAVEN:
 
 WINDOWS 7:
 
 - 1 - Baixar a JDK(Java Development Kit)
-- 2 - Baixar os bin·rios do Maven
-- 3 - Painel de Controle -> Sistema e SeguranÁa -> Sistema -> ConfiguraÁıes AvanÁadas do Sistema -> Vari·veis de Ambiente
-- 4 - New Path em Vari·veis do Sistema -> nome: JAVA_HOME -> apontar para o diretÛrio jdk(C:\Program Files\Java\jdk1.8)
-- 5 - New Path em Vari·veis do Sistema -> nome: CLASSPATH -> apontar para %JAVA_HOME%
-- 6 - Na vari·vel PATH, adicionar ao final: %JAVA_HOME%\bin
-- 7 - New Path em Vari·veis do Sistema -> nome: MAVEN_HOME -> apontar para o diretÛrio do maven(n„o o bin, a raiz)
-- 8 - Na vari·vel PATH, adicionar ao final: %MAVEN_HOME%\bin
-- 9 - no prompt(cmd), digitar maven -version, javac e java -version pra checar as instalaÁıes
+- 2 - Baixar os bin√°rios do Maven
+- 3 - Painel de Controle -> Sistema e Seguran√ßa -> Sistema -> Configura√ß√µes Avan√ßadas do Sistema -> Vari√°veis de Ambiente
+- 4 - New Path em Vari√°veis do Sistema -> nome: JAVA_HOME -> apontar para o diret√≥rio jdk(C:\Program Files\Java\jdk1.8)
+- 5 - New Path em Vari√°veis do Sistema -> nome: CLASSPATH -> apontar para %JAVA_HOME%
+- 6 - Na vari√°vel PATH, adicionar ao final: %JAVA_HOME%\bin
+- 7 - New Path em Vari√°veis do Sistema -> nome: MAVEN_HOME -> apontar para o diret√≥rio do maven(n√£o o bin, a raiz)
+- 8 - Na vari√°vel PATH, adicionar ao final: %MAVEN_HOME%\bin
+- 9 - no prompt(cmd), digitar maven -version, javac e java -version pra checar as instala√ß√µes
 
 UBUNTU 16:
 JDK:
@@ -106,7 +108,7 @@ JDK:
 - 4 - java -version
 - 5 - javac
 - 6 - sudo apt-get install openjdk-7-jre
-- 7 - sudo apt-get install openjdk-<VERSAO>-jdk (vers„o pode ser 6, 7 ou 8 no momento)
+- 7 - sudo apt-get install openjdk-<VERSAO>-jdk (vers√£o pode ser 6, 7 ou 8 no momento)
 - 8 - export JAVA_HOME=/usr/lib/jvm/java-8-oracle/?
 - 9 - export CLASSPATH=JAVA_HOME/lib/:$CLASSPATH
     export PATH=$JAVA_HOME/bin/:$PATH
