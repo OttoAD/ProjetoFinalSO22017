@@ -1,4 +1,4 @@
-package projetofinal.so.dados.processo;
+package projetofinal.so.processos;
 
 public class ProcessoInexistenteException extends Exception {
 	

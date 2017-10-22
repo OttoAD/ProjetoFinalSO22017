@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import projetofinal.so.dados.LeituraArquivoException;
 import projetofinal.so.processos.Processo;
+import projetofinal.so.processos.ProcessoInexistenteException;
 
 public class LeituraArquivoProcesso {
 
@@ -19,11 +20,9 @@ public class LeituraArquivoProcesso {
 		tamanhoArquivo = 0;
 		File novoArquivo = new File(nomeArquivoEntrada);
 		try {
-			if(!novoArquivo.createNewFile()){
-				throw new LeituraArquivoException("O arquivo não pôde ser criado");
-			}
+			novoArquivo.createNewFile();
 		}catch(IOException io) {
-			throw new LeituraArquivoException("O arquivo não pôde ser criado. Uma exceção fora capturada.",io);
+			throw new LeituraArquivoException("O arquivo não pôde ser criado",io);
 		}
 
 	}
