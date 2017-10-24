@@ -1,5 +1,5 @@
 package projetofinal.so.processos;
 
-public class GerenciaProcesso {
+public class Fila {
 
 }

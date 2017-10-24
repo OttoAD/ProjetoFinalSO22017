@@ -22,7 +22,7 @@ public class LeituraArquivoProcesso {
 		try {
 			novoArquivo.createNewFile();
 		}catch(IOException io) {
-			throw new LeituraArquivoException("O arquivo não pôde ser criado",io);
+			throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser criado",io);
 		}
 
 	}
@@ -52,9 +52,9 @@ public class LeituraArquivoProcesso {
 			this.tamanhoArquivo = contadorLinhas;
 			
 		} catch (FileNotFoundException fnf) {
-			throw new LeituraArquivoException("O arquivo não pôde ser encontrado",fnf);
+			throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser encontrado",fnf);
 		} catch (IOException io) {
-			throw new LeituraArquivoException("O arquivo não pôde ser lido",io);
+			throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser lido",io);
 		} catch (ProcessoInexistenteException pi) {
 			throw new LeituraArquivoException("Processo nulo", pi);
 		}finally{
@@ -62,7 +62,7 @@ public class LeituraArquivoProcesso {
 				leitorArquivo.close();
 				bufferArquivo.close();
 			} catch (IOException io) {
-				throw new LeituraArquivoException("O arquivo não pôde ser fechado",io);
+				throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser fechado",io);
 			}
 
 		}
