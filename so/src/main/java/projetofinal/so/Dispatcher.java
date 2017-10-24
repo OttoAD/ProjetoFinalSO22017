@@ -1,8 +1,11 @@
 package projetofinal.so;
 
 import projetofinal.so.arquivos.GerenciaArquivo;
+import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
 import projetofinal.so.memoria.GerenciaMemoria;
+import projetofinal.so.memoria.MemoriaRAM;
+import projetofinal.so.processos.BancoDeProcessos;
 import projetofinal.so.processos.GerenciaProcesso;
 import projetofinal.so.processos.Processo;
 import projetofinal.so.recursos.GerenciaRecurso;
@@ -11,17 +14,17 @@ public class Dispatcher{
 
 	private static Dispatcher instancia;
 	
-	private GerenciaMemoria gerenciadorMemoria;
-	private GerenciaProcesso gerenciadorProcesso;
+	private MemoriaRAM memoriaDoPC;
+	private BancoDeProcessos meusProcessos;
 	private GerenciaArquivo gerenciadorArquivo;
-	private GerenciaFila escalonador;
+	private Escalonador escalonador;
 	private GerenciaRecurso gerenciadorRecurso;
 	
 	private int clock;
 	
 	private void iniciaGerencia() {
-		gerenciadorMemoria = new GerenciaMemoria();
-		gerenciadorProcesso = new GerenciaProcesso();
+		memoriaDoPC = new GerenciaMemoria();
+		meusProcessos = new GerenciaProcesso();
 		gerenciadorArquivo = new GerenciaArquivo();
 		escalonador = new GerenciaFila();
 		gerenciadorRecurso = new GerenciaRecurso();
@@ -43,18 +46,21 @@ public class Dispatcher{
 		Processo processo;
 		clock = 0;
 		
-		while(gerenciadorProcesso.temNovosProcessos() || !escalonador.vazio()) {
+		while(meusProcessos.temNovosProcessos() || !escalonador.vazio()) {
 			//Verifica se tem processos para serem criados
 			//ou processos no escalonador
 			
 			do { //Cria todos os processos de já surgiram
-				processo = gerenciadorProcesso.proximoProcesso(clock);
+				processo = meusProcessos.proximoProcesso(clock);
 				
 				if (processo != null) {
-					if (gerenciadorMemoria.reservarMemoria(processo)) {
-						escalonador.escalonarProcesso(processo);
+					if (memoriaDoPC.reservarMemoria(processo.getID(), processo.getBlocosMemoria())) {
+						if (!escalonador.escalonarProcesso(processo)) {
+							//O Escalonador está cheio
+							meusProcessos.excluirProcesso(processo);
+						}
 					} else {
-						gerenciadorProcesso.excluirProcesso(processo);
+						meusProcessos.excluirProcesso(processo);
 					}
 				}
 			} while (processo != null);
