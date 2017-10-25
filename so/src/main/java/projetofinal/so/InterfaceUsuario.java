@@ -6,8 +6,10 @@ import projetofinal.so.dados.processo.ListaProcesso;
 import projetofinal.so.processos.ProcessoInexistenteException;
 
 public class InterfaceUsuario {
+	private static Dispatcher dispatcher;
 
     public static void main( String[] args ){
+    	
     	System.out.println("INICIO DO TESTE");
     	try {
 			LeituraArquivoProcesso opa = new LeituraArquivoProcesso("teste.txt");
@@ -16,6 +18,9 @@ public class InterfaceUsuario {
 			System.out.println("Tempo de inicializacao do processo 1: "+lis.getProcesso(0).getTempoInicializacao());
 			System.out.println("Tempo de processador do processo 2: "+lis.getProcesso(1).getTempoProcessador());
 			System.out.println("Qtd de linhas do arquivo: "+opa.getTamanhoArquivo());
+			dispatcher = Dispatcher.obterInstancia();
+			dispatcher.executarProcessos();
+			
 		} catch (LeituraArquivoException e) {
 			e.printStackTrace();
 		} catch (ProcessoInexistenteException e) {

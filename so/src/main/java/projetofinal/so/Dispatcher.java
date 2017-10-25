@@ -75,6 +75,8 @@ public class Dispatcher{
 			}
 		}
 		
+		memoriaDoPC.mostrarMemoria();
+		
 	}
 	
 /*
