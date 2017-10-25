@@ -3,9 +3,13 @@ package projetofinal.so.memoria;
 public interface MemoriaRAM {
 
 	/*
-	 * Reserva a memória para o processo.
+	 * Reserva a memória para o processo de tempo real.
 	 * Retorna true se havia memória suficiente,
 	 * retorna false caso contrário.
 	 */
-	public boolean reservarMemoria(int processoID, int quantidadeBlocos);
+	public boolean reservarMemoria(int processoID, int quantidadeBlocos, int prioridade);
+	
 }
+
+
+

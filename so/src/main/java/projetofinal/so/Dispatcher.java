@@ -54,7 +54,7 @@ public class Dispatcher{
 				processo = meusProcessos.proximoProcesso(clock);
 				
 				if (processo != null) {
-					if (memoriaDoPC.reservarMemoria(processo.getID(), processo.getBlocosMemoria())) {
+					if (memoriaDoPC.reservarMemoria(processo.getID(), processo.getBlocosMemoria(), processo.getPrioridade())) {
 						if (!escalonador.escalonarProcesso(processo)) {
 							//O Escalonador está cheio
 							meusProcessos.excluirProcesso(processo);
