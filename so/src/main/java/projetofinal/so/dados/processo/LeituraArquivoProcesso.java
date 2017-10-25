@@ -44,7 +44,7 @@ public class LeituraArquivoProcesso {
 			
 			leitura = bufferArquivo.readLine();
 			while(leitura!=null) {
-				lista.adicionarProcesso(parseLeitura(leitura));
+				lista.adicionarProcessoLista(parseLeitura(leitura));
 				leitura = bufferArquivo.readLine();
 				contadorLinhas++;
 			}

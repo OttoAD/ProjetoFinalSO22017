@@ -1,5 +1,5 @@
 package projetofinal.so.memoria;
 
-public class GerenciaMemoria {
+public class GerenciaMemoria implements MemoriaRAM{
 
 }

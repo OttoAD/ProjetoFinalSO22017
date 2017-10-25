@@ -1,5 +1,5 @@
 package projetofinal.so.filas;
 
-public class GerenciaFila {
+public class GerenciaFila implements Escalonador {
 
 }
