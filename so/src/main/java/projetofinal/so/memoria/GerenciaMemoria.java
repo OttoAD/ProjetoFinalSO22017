@@ -75,5 +75,5 @@ public class GerenciaMemoria implements MemoriaRAM {
 		}
 		return false;
 	}
-	
+
 }
