@@ -23,11 +23,11 @@ public class Dispatcher{
 	private int clock;
 	
 	private void iniciaGerencia() {
-		memoriaDoPC = new GerenciaMemoria();
-		meusProcessos = new GerenciaProcesso();
-		gerenciadorArquivo = new GerenciaArquivo();
-		escalonador = new GerenciaFila();
-		gerenciadorRecurso = new GerenciaRecurso();
+		this.memoriaDoPC = new GerenciaMemoria();
+		this.meusProcessos = new GerenciaProcesso(); //TODO: Modifiquei o construtor para receber a lista de processos lidos do arquivo.
+		this.gerenciadorArquivo = new GerenciaArquivo();
+		this.escalonador = new GerenciaFila();
+		this.gerenciadorRecurso = new GerenciaRecurso();
 		
 	}
 	

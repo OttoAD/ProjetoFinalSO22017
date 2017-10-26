@@ -15,9 +15,9 @@ public class ListaProcesso {
 		this.quantidade = 0;
 	}
 	
-	public void adicionarProcesso(Processo proc) throws ProcessoInexistenteException{
+	public void adicionarProcessoLista(Processo proc) throws ProcessoInexistenteException{
 		if (proc != null) {
-			lista.add(proc);
+			this.lista.add(proc);
 			quantidade++;
 		}else {
 			throw new ProcessoInexistenteException("Não se pode adicionar processo nulo");
@@ -25,11 +25,21 @@ public class ListaProcesso {
 	}
 	
 	public Processo getProcesso(int indice) throws ProcessoInexistenteException {
-		if(lista != null && lista.size()<=quantidade) {
+		if((lista != null) && (quantidade > 0) && (indice >= 0) && (indice < quantidade)) {
 			return this.lista.get(indice);
 		}else {
 			throw new ProcessoInexistenteException("Lista sem processos ou índice fora do limite");
 		}
+	}
+	
+	public void removeProcessoLista(int indice) throws ProcessoInexistenteException{
+		if (this.lista.get(indice) != null){
+			this.lista.remove(indice);
+			quantidade--;
+		}else {
+			throw new ProcessoInexistenteException("O índice do processo desejado não é válido");
+		}
+
 	}
 	
 }
