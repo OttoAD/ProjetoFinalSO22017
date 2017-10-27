@@ -54,7 +54,18 @@ public class Dispatcher{
 				processo = meusProcessos.proximoProcesso(clock);
 				
 				if (processo != null) {
-					if (memoriaDoPC.reservarMemoria(processo.getID(), processo.getBlocosMemoria(), processo.getPrioridade())) {
+					
+					//TODO: verificar se o processo exige um tamanho de memoria aceitavel
+						//Prioridade 0: maximo 64
+						//Outras prioridades: maximo 960
+					
+					//JONAS INICIOU (exemplificar funcionamento dos metodos; avisar caso queira modificar
+					int posMem = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
+					if (posMem != -1) { //posicao de memoria atribuida ao processo foi definida
+						memoriaDoPC.alocaMemoria (processo.getID(), posMem, processo.getBlocosMemoria(), processo.getPrioridade()); //Memoria reservada ao Processo 
+						//JONAS FINALIZOU EXEMPLO
+						//TODO: tratar caso posMem receba -1 (processo nao coube na memoria)
+						
 						if (!escalonador.escalonarProcesso(processo)) {
 							//O Escalonador está cheio
 							meusProcessos.excluirProcesso(processo);
