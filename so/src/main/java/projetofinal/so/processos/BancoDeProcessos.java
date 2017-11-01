@@ -40,6 +40,20 @@ public interface BancoDeProcessos {
 	 * 2 - Verificar se os OBJETOS são iguais (usando o operador ==). Assim, é necessária a garantia de que estamos
 	 * sempre manipulando o MESMO objeto e não alguma cópia equivalente deste. 
 	 */
+	
 	public void excluirProcesso(Processo processo);
 	
+	//ordena a lista processosNaoAlocados pelo criterio de tempo de inicialiacao
+	//o processoNaoAlocado[0] deve ser quem tem o menor tempo de iniciaizacao
+	
+	public void moverProcesso(Processo process);
+	
+	/* tempo do processo <= clock;
+	 * indice 0 = primeiro elemento da lista, indice 1 = segundo elemento da lista, etc...
+	 */
+	
+	public Processo proximoProcesso(int clock, int indice);
+	
+	//ID É ORDEM DE LEITURA E COMECA DO ZERO
+	//
 }

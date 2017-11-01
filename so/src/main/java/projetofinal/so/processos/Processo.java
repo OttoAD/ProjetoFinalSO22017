@@ -13,6 +13,7 @@ public class Processo {
 	private int numeroCodigoDisco;
 	
 	public Processo() {
+		this.iD = -1;
 		this.tempoInicializacao = 0;
 		this.prioridade = 0;
 		this.tempoProcessador = 0;
@@ -24,6 +25,7 @@ public class Processo {
 	}
 	
 	public Processo(Processo proc) {
+		this.iD = proc.getID();
 		this.tempoInicializacao = proc.getTempoInicializacao();
 		this.prioridade = proc.getPrioridade();
 		this.tempoProcessador = proc.getTempoProcessador();

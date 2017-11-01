@@ -2,14 +2,11 @@ package projetofinal.so.processos;
 import projetofinal.so.dados.processo.ListaProcesso;
 public class GerenciaProcesso implements BancoDeProcessos{
 	
-	private ListaProcesso lista;
+	private ListaProcesso processosNaoAlocados;
+	private ListaProcesso processosAlocados; //??????
 	
 	public GerenciaProcesso(ListaProcesso lista) {
-		this.lista = lista;
-	}
-	
-	public void setLista(ListaProcesso lista) {
-		this.lista = lista;
+		this.processosNaoAlocados = lista;
 	}
 	
 	public boolean temNovosProcessos(){
@@ -20,16 +17,5 @@ public class GerenciaProcesso implements BancoDeProcessos{
 			return false;
 		}
 	}
-
-	public Processo proximoProcesso(int clock) {
-
-		return null;
-	}
-
-	public void excluirProcesso(Processo processo) {
-
-	}
-
-	
 	
 }
