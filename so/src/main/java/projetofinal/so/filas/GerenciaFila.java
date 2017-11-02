@@ -1,22 +1,13 @@
 package projetofinal.so.filas;
 
+import projetofinal.so.dados.processo.ListaProcesso;
 import projetofinal.so.processos.Processo;
 
 public class GerenciaFila implements Escalonador {
-
-	public boolean vazio() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean escalonarProcesso(Processo processo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public Processo proximoProcesso() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	private ListaProcesso processosTempoReal;
+	private ListaProcesso processosPrioridade1;
+	private ListaProcesso processosPrioridade2;
+	private ListaProcesso processosPrioridade3;
 
 }
