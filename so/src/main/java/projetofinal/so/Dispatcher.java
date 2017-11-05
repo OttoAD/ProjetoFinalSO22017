@@ -24,7 +24,7 @@ public class Dispatcher{
 	
 	private void iniciaGerencia() {
 		this.memoriaDoPC = new GerenciaMemoria();
-		this.meusProcessos = new GerenciaProcesso(); //TODO: Modifiquei o construtor para receber a lista de processos lidos do arquivo.
+		this.meusProcessos = new GerenciaProcesso();
 		this.gerenciadorArquivo = new GerenciaArquivo();
 		this.escalonador = new GerenciaFila();
 		this.gerenciadorRecurso = new GerenciaRecurso();
@@ -50,44 +50,71 @@ public class Dispatcher{
 			//Verifica se tem processos para serem criados
 			//ou processos no escalonador
 			
-			do { //Cria todos os processos de já surgiram
-				processo = meusProcessos.proximoProcesso(clock);
-				
-				if (processo != null) {
-					
-					//TODO: verificar se o processo exige um tamanho de memoria aceitavel
-						//Prioridade 0: maximo 64
-						//Outras prioridades: maximo 960
-					
-					//JONAS INICIOU (exemplificar funcionamento dos metodos; avisar caso queira modificar
-					int posMem = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
-					if (posMem != -1) { //posicao de memoria atribuida ao processo foi definida
-						memoriaDoPC.alocaMemoria (processo.getID(), posMem, processo.getBlocosMemoria(), processo.getPrioridade()); //Memoria reservada ao Processo 
-						//JONAS FINALIZOU EXEMPLO
-						//TODO: tratar caso posMem receba -1 (processo nao coube na memoria)
-						
-						if (!escalonador.escalonarProcesso(processo)) {
-							//O Escalonador está cheio
-							meusProcessos.excluirProcesso(processo);
-						}
-					} else {
-						meusProcessos.excluirProcesso(processo);
-					}
-				}
-			} while (processo != null);
+			criarProcesso();
 			
-			processo = escalonador.proximoProcesso();
-			if (processo != null) {
-				if (processo.getPrioridade() == 0) {
-					//Executa até acabar
-				} else {
-					//Executa até acabar o quantum
-				}
-			}
+			executarProcesso();
 		}
 		
 		memoriaDoPC.mostrarMemoria();
 		
+	}
+	
+	private void criarProcesso() {
+		Processo processo;
+		int indiceProcesso = 0;
+		int posicaoMemoria = 0;
+		
+		do { //Cria todos os processos que já surgiram
+			processo = meusProcessos.proximoProcesso(clock, indiceProcesso);
+			
+			if (processo != null) {
+				
+				//TODO: verificar se o processo exige um tamanho de memoria aceitavel
+				//Prioridade 0: maximo 64
+				//Outras prioridades: maximo 960
+				try {
+					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());					
+				} catch (Exception e) {
+					// TODO Definir exceção
+					// Se o tamanho da memória não é suficiente
+					try {
+						meusProcessos.excluirProcesso(processo);						
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+				}
+				
+				//Não tinha memória disponível
+				if (posicaoMemoria == -1) {
+					indiceProcesso++;
+					continue;					
+				}
+				
+				memoriaDoPC.alocaMemoria(processo.getID(), posicaoMemoria, processo.getBlocosMemoria(), processo.getPrioridade());
+					
+				try {
+					escalonador.escalonarProcesso(processo);
+				} catch (Exception e) {
+					// TODO: definir exception
+					// Escalonador cheio
+					meusProcessos.excluirProcesso(processo);
+				}
+			}
+				
+		} while (processo != null);
+	}
+	
+	private void executarProcesso() {
+		Processo processo;
+		
+		processo = escalonador.proximoProcesso();
+		if (processo != null) {
+			if (processo.getPrioridade() == 0) {
+				//Executa até acabar
+			} else {
+				//Executa até acabar o quantum
+			}
+		}
 	}
 	
 /*
