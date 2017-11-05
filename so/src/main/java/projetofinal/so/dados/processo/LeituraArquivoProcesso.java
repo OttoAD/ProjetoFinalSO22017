@@ -31,20 +31,23 @@ public class LeituraArquivoProcesso {
 		return this.tamanhoArquivo;
 	}
 	
+	/*Agora adiciona ordenado*/
 	public ListaProcesso lerArquivo() throws LeituraArquivoException{
     	FileReader leitorArquivo = null;
     	BufferedReader bufferArquivo = null;
 		String leitura = null;
 		int contadorLinhas = 0;
 		ListaProcesso lista = new ListaProcesso();
-		
+		Processo proc = null;
    		try {
 			leitorArquivo = new FileReader(nomeArquivoEntrada);
 			bufferArquivo = new BufferedReader(leitorArquivo);
 			
 			leitura = bufferArquivo.readLine();
 			while(leitura!=null) {
-				lista.adicionarProcessoLista(parseLeitura(leitura));
+				proc = parseLeitura(leitura);
+				proc.setID(contadorLinhas);
+				lista.adicionarProcessoListaOrdenado(proc);
 				leitura = bufferArquivo.readLine();
 				contadorLinhas++;
 			}

@@ -8,38 +8,89 @@ import projetofinal.so.processos.ProcessoInexistenteException;
 public class ListaProcesso {
 
 	ArrayList<Processo> lista;
-	private int quantidade;
 	
 	public ListaProcesso() {
 		this.lista = new ArrayList<Processo>();
-		this.quantidade = 0;
 	}
 	
-	public void adicionarProcessoLista(Processo proc) throws ProcessoInexistenteException{
+	/*
+	 * Adicionada a inserção ordenada. Se o tempo de inicialização do processo a ser adicionado for maior que a posição atual,
+	 * então avança uma posição e verifica novamente até que a condição seja falsa. O método add(indice,objeto) faz um shift pra direita
+	 * com os processos.
+	 * Caso seja a primeira inserção, aux == null, então só usa o add(objeto) 
+	 * */
+	public void adicionarProcessoListaOrdenado(Processo proc) throws ProcessoInexistenteException{
 		if (proc != null) {
-			this.lista.add(proc);
-			quantidade++;
+			int tempo = proc.getTempoInicializacao();
+			int i = 0;
+			Processo aux = lista.get(i);
+			
+			if(aux!=null) {
+				while(tempo > lista.get(i).getTempoInicializacao()) {
+					i++;
+				}
+			
+				this.lista.add(i, proc);
+			}else {
+				this.lista.add(proc);
+			}
 		}else {
 			throw new ProcessoInexistenteException("Não se pode adicionar processo nulo");
 		}
 	}
 	
-	public Processo getProcesso(int indice) throws ProcessoInexistenteException {
-		if((lista != null) && (quantidade > 0) && (indice >= 0) && (indice < quantidade)) {
-			return this.lista.get(indice);
+	public void adicionarProcessolista(Processo proc) throws ProcessoInexistenteException{
+		if(proc!=null) {
+			this.lista.add(proc);
 		}else {
-			throw new ProcessoInexistenteException("Lista sem processos ou índice fora do limite");
+			throw new ProcessoInexistenteException("Não se pode adicionar processo nulo");
 		}
 	}
 	
-	public void removeProcessoLista(int indice) throws ProcessoInexistenteException{
-		if (this.lista.get(indice) != null){
-			this.lista.remove(indice);
-			quantidade--;
-		}else {
-			throw new ProcessoInexistenteException("O índice do processo desejado não é válido");
-		}
 
+	
+	public Processo getProcessoPorIdentificador(int identificador) throws ProcessoInexistenteException {
+		Processo proc = null;
+		if(!ListaVazia()) {
+			for(int indice = 0; indice < this.lista.size(); indice++) {
+				proc = this.lista.get(indice);
+				if(proc.getID() == identificador) {
+					return proc;
+				}
+			}
+		}
+		throw new ProcessoInexistenteException("O processo não foi encontrado na lista");
 	}
+	
+	public Processo getProcessoPorIndice(int indice) throws ProcessoInexistenteException{
+		if(!ListaVazia()) {
+			try {
+				return lista.get(indice);
+			}catch(IndexOutOfBoundsException iofbex) {
+				throw new ProcessoInexistenteException("O índice do processo desejado não é válido", iofbex);
+			}
+		}
+		throw new ProcessoInexistenteException("O processo não foi encontrado na lista");
+	}
+	
+	
+	public void removeProcessoLista(int indice) throws ProcessoInexistenteException{
+		try {
+			this.lista.remove(indice);
+		}catch(IndexOutOfBoundsException iofbex) {
+			throw new ProcessoInexistenteException("O índice do processo desejado não é válido", iofbex);
+		}
+	}
+	
+	public void removeProcessoLista(Processo proc) throws ProcessoInexistenteException{
+		if (!this.lista.remove(proc)) {
+			throw new ProcessoInexistenteException("O objeto do processo desejado não é válido ou não foi encontrado");
+		}
+	}
+	
+	public boolean ListaVazia() {
+		return lista.isEmpty();
+	}
+	
 	
 }

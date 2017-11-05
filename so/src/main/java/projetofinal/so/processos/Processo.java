@@ -13,9 +13,9 @@ public class Processo {
 	private int numeroCodigoDisco;
 	
 	public Processo() {
-		this.iD = -1;
+		this.iD = 0;
 		this.tempoInicializacao = 0;
-		this.prioridade = 0;
+		this.prioridade = -1;
 		this.tempoProcessador = 0;
 		this.blocosMemoria = 0;
 		this.numeroCodigoImpressora = 0;
