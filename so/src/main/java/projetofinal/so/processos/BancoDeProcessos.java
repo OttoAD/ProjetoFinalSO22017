@@ -4,7 +4,7 @@ public interface BancoDeProcessos {
 	
 	public boolean temNovosProcessos();
 	
-	public Processo proximoProcesso(int clock,int indice) throws ProcessoInexistenteException;
+	public Processo proximoProcesso(int clock,int indice);
 
 	public void excluirProcesso(Processo processo) throws ProcessoInexistenteException;
 	

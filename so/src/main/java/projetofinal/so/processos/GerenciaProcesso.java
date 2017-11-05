@@ -1,21 +1,22 @@
 package projetofinal.so.processos;
-import projetofinal.so.dados.LeituraArquivoException;
-import projetofinal.so.dados.processo.LeituraArquivoProcesso;
 import projetofinal.so.dados.processo.ListaProcesso;
 public class GerenciaProcesso implements BancoDeProcessos{
 	
 	private ListaProcesso processosNaoAlocados;
 	private ListaProcesso processosAlocados;
 	
-	public GerenciaProcesso(String nomeArquivo) throws LeituraArquivoException {
-		LeituraArquivoProcesso listaArquivo = new LeituraArquivoProcesso(nomeArquivo);
-		ListaProcesso lista = listaArquivo.lerArquivo();
+	public GerenciaProcesso() {
+		this.processosNaoAlocados = new ListaProcesso();
+		this.processosAlocados = new ListaProcesso();
+	}
+	
+	public GerenciaProcesso(ListaProcesso lista) {
 		this.processosNaoAlocados = lista;
 		this.processosAlocados = new ListaProcesso();
 	}
 	
 	public boolean temNovosProcessos(){
-		return processosNaoAlocados.ListaVazia();
+		return !processosNaoAlocados.ListaVazia();
 	}
 
 	public void excluirProcesso(Processo proc) throws ProcessoInexistenteException {
@@ -28,14 +29,15 @@ public class GerenciaProcesso implements BancoDeProcessos{
 		processosNaoAlocados.removeProcessoLista(proc);
 	}
 
-	public Processo proximoProcesso(int clock, int indice) throws ProcessoInexistenteException{
-		Processo proc = processosNaoAlocados.getProcessoPorIndice(indice);
-		if(proc.getTempoInicializacao() <= clock) {
-			return proc;
-		}else {
-			return null;
-		}
-
+	public Processo proximoProcesso(int clock, int indice) {
+		try {
+			Processo proc = processosNaoAlocados.getProcessoPorIndice(indice);
+			if(proc.getTempoInicializacao() <= clock) {
+				return proc;
+			}
+		} catch (ProcessoInexistenteException pie) {}
+		
+		return null;
 	}
 	
  

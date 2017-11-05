@@ -1,12 +1,14 @@
 package projetofinal.so.memoria;
 
-import projetofinal.so.processos.ProcessoInexistenteException;
-
 public class GerenciaMemoria implements MemoriaRAM {
 	
 	private Memoria memoria; //Verificar como a memoria eh tratada pelo gerenciador; Primeiro palpite: objeto private do gerenciador
 	
 	/*Mostra na tela a representacao dos vetores de memoria*/
+	
+	public GerenciaMemoria() {
+		memoria = new Memoria();
+	}
 	
 	public void mostrarMemoria () {
 		int[] memReal = memoria.getMemReal();

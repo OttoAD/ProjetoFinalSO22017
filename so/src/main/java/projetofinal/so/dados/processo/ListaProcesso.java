@@ -23,15 +23,12 @@ public class ListaProcesso {
 		if (proc != null) {
 			int tempo = proc.getTempoInicializacao();
 			int i = 0;
-			Processo aux = lista.get(i);
-			
-			if(aux!=null) {
+			try {
 				while(tempo > lista.get(i).getTempoInicializacao()) {
 					i++;
 				}
-			
 				this.lista.add(i, proc);
-			}else {
+			} catch (IndexOutOfBoundsException iobe) {
 				this.lista.add(proc);
 			}
 		}else {
@@ -63,14 +60,11 @@ public class ListaProcesso {
 	}
 	
 	public Processo getProcessoPorIndice(int indice) throws ProcessoInexistenteException{
-		if(!ListaVazia()) {
-			try {
-				return lista.get(indice);
-			}catch(IndexOutOfBoundsException iofbex) {
-				throw new ProcessoInexistenteException("O índice do processo desejado não é válido", iofbex);
-			}
+		try {
+			return lista.get(indice);
+		}catch(IndexOutOfBoundsException iofbex) {
+			throw new ProcessoInexistenteException("O índice do processo desejado não é válido", iofbex);
 		}
-		throw new ProcessoInexistenteException("O processo não foi encontrado na lista");
 	}
 	
 	

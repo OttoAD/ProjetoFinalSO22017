@@ -1,6 +1,9 @@
 package projetofinal.so;
 
+import java.util.logging.Logger;
+
 import projetofinal.so.arquivos.GerenciaArquivo;
+import projetofinal.so.dados.processo.ListaProcesso;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
 import projetofinal.so.memoria.GerenciaMemoria;
@@ -8,10 +11,12 @@ import projetofinal.so.memoria.MemoriaRAM;
 import projetofinal.so.processos.BancoDeProcessos;
 import projetofinal.so.processos.GerenciaProcesso;
 import projetofinal.so.processos.Processo;
+import projetofinal.so.processos.ProcessoInexistenteException;
 import projetofinal.so.recursos.GerenciaRecurso;
 
 public class Dispatcher{
 
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	private static Dispatcher instancia;
 	
 	private MemoriaRAM memoriaDoPC;
@@ -42,29 +47,39 @@ public class Dispatcher{
 		return instancia;
 	}
 	
+	public void novosProcessos(ListaProcesso processos) {
+		this.meusProcessos = new GerenciaProcesso(processos);
+	}
+	
 	public void executarProcessos() {
-		Processo processo;
 		clock = 0;
 		
-		while(meusProcessos.temNovosProcessos() || !escalonador.vazio()) {
+		LOGGER.info("Cheguei aqui");
+		
+		while(meusProcessos.temNovosProcessos()/* || !escalonador.vazio()*/) {
 			//Verifica se tem processos para serem criados
 			//ou processos no escalonador
-			
+			LOGGER.info("Ainda tem processos, Clock " + clock);
 			criarProcesso();
 			
 			executarProcesso();
+			
+			clock++;
 		}
 		
-		memoriaDoPC.mostrarMemoria();
+		//memoriaDoPC.mostrarMemoria();
 		
 	}
 	
 	private void criarProcesso() {
-		Processo processo;
+		Processo processo = null;
 		int indiceProcesso = 0;
 		int posicaoMemoria = 0;
 		
+		LOGGER.info("Criando processos");
+		
 		do { //Cria todos os processos que já surgiram
+			
 			processo = meusProcessos.proximoProcesso(clock, indiceProcesso);
 			
 			if (processo != null) {
@@ -72,6 +87,8 @@ public class Dispatcher{
 				//TODO: verificar se o processo exige um tamanho de memoria aceitavel
 				//Prioridade 0: maximo 64
 				//Outras prioridades: maximo 960
+				
+				LOGGER.info("Criando o processo " + processo.getID());
 				try {
 					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());					
 				} catch (Exception e) {
@@ -91,13 +108,24 @@ public class Dispatcher{
 				}
 				
 				memoriaDoPC.alocaMemoria(processo.getID(), posicaoMemoria, processo.getBlocosMemoria(), processo.getPrioridade());
+				try {
+					meusProcessos.moverProcesso(processo);
+				} catch (ProcessoInexistenteException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 					
 				try {
 					escalonador.escalonarProcesso(processo);
 				} catch (Exception e) {
 					// TODO: definir exception
 					// Escalonador cheio
-					meusProcessos.excluirProcesso(processo);
+					try {
+						meusProcessos.excluirProcesso(processo);
+					} catch (ProcessoInexistenteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 				
@@ -115,58 +143,5 @@ public class Dispatcher{
 				//Executa até acabar o quantum
 			}
 		}
-	}
-	
-/*
-	Dispatcher iniciado
-	
-	Ler arquivos txt {
-		Se leu um processo {
-			adiciona o processo na lista de processos
-		}
-	Leitura terminada
-	}
-	
-	Iniciar contador do relógio
-	
-	loop do relógio {
-		verifica na lista de processos se tem algum para ser criado
-		se tem {
-			pede para o gerenciador de memória reservar memória pro processo
-			se tem memória {
-				salva no processo o endereço da memória
-				salva na memória o nome do processo
-				//pensar sobre a melhor estratégia
-				manda para o escalonador
-			} se não tem memória {
-				recusa a criação do processo
-			}
-		}
-		
-		pede pro escalonador o processo a ser executado
-		se for de tempo real {
-			Executa todas as instruções
-		}
-		se for de usuário {
-			Executa até acabar o quantum
-		}
-		
-	}
-	Sai do loop quando não houverem processos a serem criados
-	ou processos no escalonador
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-
- */
-	
+	}	
 }
