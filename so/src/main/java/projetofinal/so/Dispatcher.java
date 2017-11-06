@@ -91,7 +91,8 @@ public class Dispatcher{
 				
 				LOGGER.info("Criando o processo " + processo.getID());
 				try {
-					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());					
+					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
+					LOGGER.info("Memoria disponivel na posicao " + posicaoMemoria);
 				} catch (MemoriaInsuficienteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -103,10 +104,9 @@ public class Dispatcher{
 					}
 				}
 				
-				//Não tinha memória disponível
-				if (posicaoMemoria == -1) {
+				if (posicaoMemoria == -1) { //Não há memória disponível no momento
 					indiceProcesso++;
-					continue;					
+					continue;
 				}
 				
 				memoriaDoPC.alocaMemoria(processo.getID(), posicaoMemoria, processo.getBlocosMemoria(), processo.getPrioridade());
@@ -140,9 +140,12 @@ public class Dispatcher{
 		processo = escalonador.proximoProcesso();
 		if (processo != null) {
 			if (processo.getPrioridade() == 0) {
-				//Executa até acabar
+				//TODO: Executar ate acabar
+				//TODO: Retirar da fila do escalonador
+				//TODO: sugestao: retornar int pois precisa avisar ao Dispatcher quantos clocks incrementaram enquanto executava
 			} else {
-				//Executa até acabar o quantum
+				//TODO: Executa até acabar o quantum
+				//TODO: Retirar da fila do escalonador OU trocar de fila de prioridade
 			}
 		}
 	}	
