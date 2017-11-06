@@ -13,35 +13,22 @@ public class ListaProcesso {
 		this.lista = new ArrayList<Processo>();
 	}
 	
-	/*
-	 * Adicionada a inserção ordenada. Se o tempo de inicialização do processo a ser adicionado for maior que a posição atual,
-	 * então avança uma posição e verifica novamente até que a condição seja falsa. O método add(indice,objeto) faz um shift pra direita
-	 * com os processos.
-	 * Caso seja a primeira inserção, aux == null, então só usa o add(objeto) 
-	 * */
-	public void adicionarProcessoListaOrdenado(Processo proc) throws ProcessoInexistenteException{
-		if (proc != null) {
-			int tempo = proc.getTempoInicializacao();
-			int i = 0;
-			try {
-				while(tempo > lista.get(i).getTempoInicializacao()) {
-					i++;
-				}
-				this.lista.add(i, proc);
-			} catch (IndexOutOfBoundsException iobe) {
-				this.lista.add(proc);
+	public void adicionarProcessoListaOrdenado(Processo proc){
+		int tempo = proc.getTempoInicializacao();
+		int i = 0;
+		try {
+			while(tempo > lista.get(i).getTempoInicializacao()) {
+				i++;
 			}
-		}else {
-			throw new ProcessoInexistenteException("Não se pode adicionar processo nulo");
+			this.lista.add(i, proc);
+		} catch (IndexOutOfBoundsException iobe) {//caso da primeira inserção
+			this.lista.add(proc);
 		}
+		
 	}
 	
-	public void adicionarProcessolista(Processo proc) throws ProcessoInexistenteException{
-		if(proc!=null) {
-			this.lista.add(proc);
-		}else {
-			throw new ProcessoInexistenteException("Não se pode adicionar processo nulo");
-		}
+	public void adicionarProcessolista(Processo proc){
+		this.lista.add(proc);
 	}
 	
 

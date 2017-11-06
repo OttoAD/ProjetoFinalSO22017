@@ -14,19 +14,27 @@ public class Fila {
 		this.processos = new ArrayList<Processo>();
 	}
 	
-	public void inserirProcesso(Processo proc) throws ProcessoInexistenteException {
-		if(proc!=null) {
-			processos.add(proc);
-		}else {
-			throw new ProcessoInexistenteException("Não se pode inserir processos nulos");
+	public void inserirProcesso(Processo proc){
+			this.processos.add(proc);
+	}
+	
+	public void removerProcesso(int identificador) throws ProcessoInexistenteException {
+		this.processos.remove(getProcesso(identificador));
+	}
+	
+	public Processo getProcesso(int identificador) throws ProcessoInexistenteException{
+		Processo proc = null;
+		int tamanho = processos.size();
+		for(int indice = 0; indice < tamanho ;indice++) {
+			proc = processos.get(indice);
+			if(proc.getID() == identificador) {
+				return proc;
+			}
 		}
+		throw new ProcessoInexistenteException("O processo não se encontra na fila");
 	}
 	
-	public void removerProcesso(int identificador) {
-		
-	}
-	
-	public void getProcesso(int identificador) {
-		
+	public boolean filaVazia() {
+		return this.processos.isEmpty();
 	}
 }

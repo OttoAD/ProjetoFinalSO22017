@@ -58,8 +58,6 @@ public class LeituraArquivoProcesso {
 			throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser encontrado",fnf);
 		} catch (IOException io) {
 			throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser lido",io);
-		} catch (ProcessoInexistenteException pi) {
-			throw new LeituraArquivoException("Processo nulo", pi);
 		}finally{
 			try {
 				leitorArquivo.close();
