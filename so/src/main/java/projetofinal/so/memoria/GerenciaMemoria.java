@@ -20,13 +20,19 @@ public class GerenciaMemoria implements MemoriaRAM {
 	
 	/* Procura uma a primeira sequencia de X blocos livres sequenciais na memoria
 	 * Retorna a posição incial da sequencia no vetor de memoria */
-	public int encontraMemoria (int quantidadeBlocos, int prioridade) {
+	public int encontraMemoria (int quantidadeBlocos, int prioridade) throws MemoriaInsuficienteException{
 		
 		int[] memAtual = null;
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
+			if (quantidadeBlocos > 64) { //usa mais que o disponivel na memoria de tempo real
+				throw new MemoriaInsuficienteException("Nao há memória de tempo real suficiente em hardware para o processo.");
+			}
 			memAtual = memoria.getMemReal(); //obtem o estado atual da memoria de tempo real
 		}
 		else { //processo de usuario
+			if (quantidadeBlocos > 960) { //usa mais que o disponivel na memoria de usuario
+				throw new MemoriaInsuficienteException("Nao há memória de usuário suficiente em hardware para o processo.");
+			}
 			memAtual = memoria.getMemUsuario(); //obtem o estado atual da memoria de usuario
 		}
 		
