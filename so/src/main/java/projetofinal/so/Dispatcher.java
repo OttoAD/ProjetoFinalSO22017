@@ -7,6 +7,7 @@ import projetofinal.so.dados.processo.ListaProcesso;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
 import projetofinal.so.memoria.GerenciaMemoria;
+import projetofinal.so.memoria.MemoriaInsuficienteException;
 import projetofinal.so.memoria.MemoriaRAM;
 import projetofinal.so.processos.BancoDeProcessos;
 import projetofinal.so.processos.GerenciaProcesso;
@@ -91,13 +92,14 @@ public class Dispatcher{
 				LOGGER.info("Criando o processo " + processo.getID());
 				try {
 					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());					
-				} catch (Exception e) {
-					// TODO Definir exceção
-					// Se o tamanho da memória não é suficiente
+				} catch (MemoriaInsuficienteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 					try {
 						meusProcessos.excluirProcesso(processo);						
-					} catch (Exception e2) {
+					} catch (ProcessoInexistenteException e2) {
 						// TODO: handle exception
+						e2.printStackTrace();
 					}
 				}
 				
