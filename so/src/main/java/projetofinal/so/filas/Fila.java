@@ -1,40 +1,35 @@
 package projetofinal.so.filas;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import projetofinal.so.processos.Processo;
 import projetofinal.so.processos.ProcessoInexistenteException;
 
 public class Fila {
 	
-	private ArrayList<Processo> processos;
+	private LinkedList<Processo> processos;
 	
 	
 	public Fila() {
-		this.processos = new ArrayList<Processo>();
+		this.processos = new LinkedList<Processo>();
 	}
 	
 	public void inserirProcesso(Processo proc){
-			this.processos.add(proc);
+			this.processos.addLast(proc);
 	}
-	
-	public void removerProcesso(int identificador) throws ProcessoInexistenteException {
-		this.processos.remove(getProcesso(identificador));
-	}
-	
-	public Processo getProcesso(int identificador) throws ProcessoInexistenteException{
-		Processo proc = null;
-		int tamanho = processos.size();
-		for(int indice = 0; indice < tamanho ;indice++) {
-			proc = processos.get(indice);
-			if(proc.getID() == identificador) {
-				return proc;
-			}
+		
+	public Processo getProcesso(){
+		if(!filaVazia()) {
+			return this.processos.removeFirst();
 		}
-		throw new ProcessoInexistenteException("O processo não se encontra na fila");
+		return null;
 	}
-	
+		
 	public boolean filaVazia() {
 		return this.processos.isEmpty();
+	}
+	
+	public boolean removerProcesso(Processo proc){
+		return this.processos.remove(proc);
 	}
 }

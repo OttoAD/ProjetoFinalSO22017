@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import projetofinal.so.processos.Processo;
 import projetofinal.so.processos.ProcessoInexistenteException;
-
+/*
+ * Essa é a nossa lista de processos "prontos" por assim dizer.
+ * */
 public class ListaProcesso {
 
 	ArrayList<Processo> lista;
@@ -35,7 +37,7 @@ public class ListaProcesso {
 	
 	public Processo getProcessoPorIdentificador(int identificador) throws ProcessoInexistenteException {
 		Processo proc = null;
-		if(!ListaVazia()) {
+		if(!listaVazia()) {
 			for(int indice = 0; indice < this.lista.size(); indice++) {
 				proc = this.lista.get(indice);
 				if(proc.getID() == identificador) {
@@ -69,7 +71,7 @@ public class ListaProcesso {
 		}
 	}
 	
-	public boolean ListaVazia() {
+	public boolean listaVazia() {
 		return this.lista.isEmpty();
 	}
 

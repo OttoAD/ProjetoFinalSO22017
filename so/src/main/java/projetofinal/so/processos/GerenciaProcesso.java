@@ -16,7 +16,7 @@ public class GerenciaProcesso implements BancoDeProcessos{
 	}
 	
 	public boolean temNovosProcessos(){
-		return !processosNaoAlocados.ListaVazia();
+		return !processosNaoAlocados.listaVazia();
 	}
 
 	public void excluirProcesso(Processo proc) throws ProcessoInexistenteException {

@@ -25,9 +25,6 @@ public interface Escalonador {
 	public Processo proximoProcesso(); //verifia as filas e ve quem é prioritario
 		//retorna null se nao tem processo em nenhuma fila do escalonador
 	
-	public void excluirProcesso (Processo process); //processo foi executado ate o fim, retirar do escalonador
-		//utilizar process.prioridade para saber em que fila ele esta
-	
 	public void diminuirPrioridade (Processo process); //quantum acabou, mas o processo nao
 		//utilizar process.prioridade para saber em que fila ele esta
 		//diminuir a prioridade e trocar de fila
