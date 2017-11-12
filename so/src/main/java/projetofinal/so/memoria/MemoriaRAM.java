@@ -3,10 +3,10 @@ package projetofinal.so.memoria;
 public interface MemoriaRAM {
 
 	/* Procura uma a primeira sequencia de X blocos livres sequenciais na memoria
-	 * Retorna a posição incial da sequencia no vetor de memoria */
-	//TODO Não é a memória que deve se preocupar se o processo pede um espaço impossível?
-	//TODO Retornar excessão caso o pedido seja grande demais
-	public int encontraMemoria (int quantidadeBlocos, int prioridade);
+	 * Retorna a posição incial da sequencia no vetor de memoria
+	 * Lança Exception caso o processo solicite uma memoria impossivel
+	*/
+	public int encontraMemoria (int quantidadeBlocos, int prioridade) throws MemoriaInsuficienteException;
 	
 	/* Aloca 'tamanhoBloco' espacos de memoria a partir de uma posicao inicial do vetor
 	 * Tais espacos serao atribuidos ao processoID */

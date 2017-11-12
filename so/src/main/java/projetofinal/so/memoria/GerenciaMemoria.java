@@ -20,13 +20,19 @@ public class GerenciaMemoria implements MemoriaRAM {
 	
 	/* Procura uma a primeira sequencia de X blocos livres sequenciais na memoria
 	 * Retorna a posição incial da sequencia no vetor de memoria */
-	public int encontraMemoria (int quantidadeBlocos, int prioridade) {
+	public int encontraMemoria (int quantidadeBlocos, int prioridade) throws MemoriaInsuficienteException{
 		
 		int[] memAtual = null;
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
+			if (quantidadeBlocos > 64) { //usa mais que o disponivel na memoria de tempo real
+				throw new MemoriaInsuficienteException("Nao há memória de tempo real suficiente em hardware para o processo.");
+			}
 			memAtual = memoria.getMemReal(); //obtem o estado atual da memoria de tempo real
 		}
 		else { //processo de usuario
+			if (quantidadeBlocos > 960) { //usa mais que o disponivel na memoria de usuario
+				throw new MemoriaInsuficienteException("Nao há memória de usuário suficiente em hardware para o processo.");
+			}
 			memAtual = memoria.getMemUsuario(); //obtem o estado atual da memoria de usuario
 		}
 		
@@ -36,7 +42,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 			if (memAtual[blCorrente] == 0) { //bloco de memoria livre
 				nVazios++;
 				if (nVazios == quantidadeBlocos) { //encontrado o 'First Fit'
-					return (blCorrente-nVazios); //retorna a posicao inicial do vetor de blocos livres
+					return (blCorrente-nVazios+1); //retorna a posicao inicial do vetor de blocos livres
 				}
 			}
 			else { //bloco ocupado; reiniciar contagem
@@ -56,7 +62,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 	public void alocaMemoria (int processoID, int posicaoInicial, int tamanhoBloco, int prioridade) { 
 		
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
-			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco);
+			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1);
 		}
 		else { //processo de usuario
 			memoria.setMemUsuarioRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco);

@@ -7,6 +7,7 @@ import projetofinal.so.dados.processo.ListaProcesso;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
 import projetofinal.so.memoria.GerenciaMemoria;
+import projetofinal.so.memoria.MemoriaInsuficienteException;
 import projetofinal.so.memoria.MemoriaRAM;
 import projetofinal.so.processos.BancoDeProcessos;
 import projetofinal.so.processos.GerenciaProcesso;
@@ -90,21 +91,22 @@ public class Dispatcher{
 				
 				LOGGER.info("Criando o processo " + processo.getID());
 				try {
-					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());					
-				} catch (Exception e) {
-					// TODO Definir exceção
-					// Se o tamanho da memória não é suficiente
+					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
+					LOGGER.info("Memoria disponivel na posicao " + posicaoMemoria);
+				} catch (MemoriaInsuficienteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 					try {
 						meusProcessos.excluirProcesso(processo);						
-					} catch (Exception e2) {
+					} catch (ProcessoInexistenteException e2) {
 						// TODO: handle exception
+						e2.printStackTrace();
 					}
 				}
 				
-				//Não tinha memória disponível
-				if (posicaoMemoria == -1) {
+				if (posicaoMemoria == -1) { //Não há memória disponível no momento
 					indiceProcesso++;
-					continue;					
+					continue;
 				}
 				
 				memoriaDoPC.alocaMemoria(processo.getID(), posicaoMemoria, processo.getBlocosMemoria(), processo.getPrioridade());
@@ -138,9 +140,12 @@ public class Dispatcher{
 		processo = escalonador.proximoProcesso();
 		if (processo != null) {
 			if (processo.getPrioridade() == 0) {
-				//Executa até acabar
+				//TODO: Executar ate acabar
+				//TODO: Retirar da fila do escalonador
+				//TODO: sugestao: retornar int pois precisa avisar ao Dispatcher quantos clocks incrementaram enquanto executava
 			} else {
-				//Executa até acabar o quantum
+				//TODO: Executa até acabar o quantum
+				//TODO: Retirar da fila do escalonador OU trocar de fila de prioridade
 			}
 		}
 	}	
