@@ -79,6 +79,18 @@ public class GerenciaFila implements Escalonador {
 		}
 	}
 	
+	public int executarProcesso(Processo processo) {
+		int tempoTotal = processo.getTempoProcessador();
+		processo.setTempoProcessador(0);
+		return tempoTotal;
+	}
+	
+	public int executarQuantum(Processo processo) {
+		int tempoRestante = processo.getTempoProcessador();
+		int tempoTotal = tempoRestante <= QUANTUM ? tempoRestante : QUANTUM; //executa durante o minimo entre restante e QUANTUM
+		processo.setTempoProcessador(tempoRestante-tempoTotal); //atualiza o tempo restante
+		return tempoTotal;
+	}
 	
 
 }

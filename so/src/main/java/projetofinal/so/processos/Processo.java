@@ -80,6 +80,10 @@ public class Processo {
 		this.tempoProcessador = tempoProcessador;
 	}
 	
+	public void executarQuantum() {
+		this.tempoProcessador -= tempoProcessador; 
+	}
+	
 	public void setBlocosMemoria(int blocosMemoria) {
 		this.blocosMemoria = blocosMemoria;
 	}

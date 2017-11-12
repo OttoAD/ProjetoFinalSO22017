@@ -28,5 +28,13 @@ public interface Escalonador {
 	public void diminuirPrioridade (Processo process); //quantum acabou, mas o processo nao
 		//utilizar process.prioridade para saber em que fila ele esta
 		//diminuir a prioridade e trocar de fila
+
+	/*Executa processo ate o fim
+	 * Retorna ao dispatcher quantos clocks foram necessarios para a execucao*/
+	public int executarProcesso(Processo processo);
+
+	/* Executa processo durante o tempo determinado pelo quantum
+	 * Retorna ao dispatcher o quantum determinado*/
+	public int executarQuantum(Processo processo);
 		
 }

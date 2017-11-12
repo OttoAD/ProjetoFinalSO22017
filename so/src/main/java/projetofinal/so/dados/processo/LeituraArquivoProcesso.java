@@ -36,7 +36,7 @@ public class LeituraArquivoProcesso {
     	FileReader leitorArquivo = null;
     	BufferedReader bufferArquivo = null;
 		String leitura = null;
-		int contadorLinhas = 0;
+		int contadorLinhas = 1; //Jonas alterou pois processo 0 significa memoria vazia
 		ListaProcesso lista = new ListaProcesso();
 		Processo proc = null;
    		try {

@@ -69,30 +69,23 @@ public class GerenciaMemoria implements MemoriaRAM {
 		}
 	}
 	
-	/*
-	 * desaloca todos os blocos de memoria alocados ao processo de um ID especificado
-	 * A prioridade do processo define se o processo de desalocacao deve ser feito na memoria de usuario ou de tempo real*/
 	
 	public boolean desalocarProcesso(int processoID, int prioridade) {
 		
 		int[] memAtual = null;
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
 			memAtual = memoria.getMemReal(); //obtem o estado atual da memoria de tempo real
+			for (int i = 0; i < memAtual.length; i++) { //percorre toda a memoria
+				memoria.setMemReal(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
+			}
+			return true;
 		}
 		else { //processo de usuario
 			memAtual = memoria.getMemUsuario(); //obtem o estado atual da memoria de usuario
-		}
-		
-		for (int i = 0; i < memAtual.length; i++) { //percorre toda a memoria
-			if (memAtual[i] == processoID) { //encontrou bloco de memoria a ser desalocado
-				if (prioridade == 0)
-					memoria.setMemReal(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
-				else 
-					memoria.setMemUsuario(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
-				return true;
+			for (int i = 0; i < memAtual.length; i++) { //percorre toda a memoria
+				memoria.setMemUsuario(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
 			}
+			return true;
 		}
-		return false;
 	}
-
 }

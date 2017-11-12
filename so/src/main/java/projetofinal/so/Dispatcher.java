@@ -57,15 +57,14 @@ public class Dispatcher{
 		
 		LOGGER.info("Cheguei aqui");
 		
-		while(meusProcessos.temNovosProcessos()/* || !escalonador.vazio()*/) {
+		while(meusProcessos.temNovosProcessos() || !escalonador.vazio()) {
 			//Verifica se tem processos para serem criados
 			//ou processos no escalonador
-			LOGGER.info("Ainda tem processos, Clock " + clock);
+			LOGGER.info("Clock " + clock);
 			criarProcesso();
 			
 			executarProcesso();
 			
-			clock++;
 		}
 		
 		//memoriaDoPC.mostrarMemoria();
@@ -77,43 +76,35 @@ public class Dispatcher{
 		int indiceProcesso = 0;
 		int posicaoMemoria = 0;
 		
-		LOGGER.info("Criando processos");
-		
 		do { //Cria todos os processos que já surgiram
 			
 			processo = meusProcessos.proximoProcesso(clock, indiceProcesso);
 			
 			if (processo != null) {
 				
-				//TODO: verificar se o processo exige um tamanho de memoria aceitavel
-				//Prioridade 0: maximo 64
-				//Outras prioridades: maximo 960
-				
 				LOGGER.info("Criando o processo " + processo.getID());
 				try {
 					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
-					LOGGER.info("Memoria disponivel na posicao " + posicaoMemoria);
 				} catch (MemoriaInsuficienteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					try {
 						meusProcessos.excluirProcesso(processo);						
 					} catch (ProcessoInexistenteException e2) {
-						// TODO: handle exception
 						e2.printStackTrace();
 					}
 				}
 				
 				if (posicaoMemoria == -1) { //Não há memória disponível no momento
 					indiceProcesso++;
+					LOGGER.info("Memoria insuficiente para o processo " + processo.getID());
 					continue;
 				}
 				
+				LOGGER.info("Memoria disponivel na posicao " + posicaoMemoria);
 				memoriaDoPC.alocaMemoria(processo.getID(), posicaoMemoria, processo.getBlocosMemoria(), processo.getPrioridade());
 				try {
 					meusProcessos.moverProcesso(processo);
 				} catch (ProcessoInexistenteException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
 					
@@ -125,7 +116,6 @@ public class Dispatcher{
 					try {
 						meusProcessos.excluirProcesso(processo);
 					} catch (ProcessoInexistenteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -139,14 +129,23 @@ public class Dispatcher{
 		
 		processo = escalonador.proximoProcesso();
 		if (processo != null) {
-			if (processo.getPrioridade() == 0) {
-				//TODO: Executar ate acabar
-				//TODO: Retirar da fila do escalonador
-				//TODO: sugestao: retornar int pois precisa avisar ao Dispatcher quantos clocks incrementaram enquanto executava
-			} else {
-				//TODO: Executa até acabar o quantum
-				//TODO: Retirar da fila do escalonador OU trocar de fila de prioridade
+			if (processo.getPrioridade() == 0) { //JONAS FEZ ESSE BLOCO DE CODIGO
+				clock += escalonador.executarProcesso(processo); //executar processo ate o fim
+			} else { 
+				clock += escalonador.executarQuantum(processo);
 			}
+			
+			if (processo.getTempoProcessador() == 0) { //esgotou o processo
+				memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
+				LOGGER.info("Processo "+processo.getID()+" finalizou no clock " +clock);
+			}
+			else { //mais 'Quantum's serão necessarios
+				//TODO: DIMINUIR A PRIORIDADE DO PROCESSO
+				escalonador.escalonarProcesso(processo);
+			}
+		}
+		else { //nenhum processo a ser executado
+			clock++;
 		}
 	}	
 }
