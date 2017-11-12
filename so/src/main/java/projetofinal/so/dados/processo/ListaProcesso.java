@@ -70,7 +70,11 @@ public class ListaProcesso {
 	}
 	
 	public boolean ListaVazia() {
-		return lista.isEmpty();
+		return this.lista.isEmpty();
+	}
+
+	public int getQuantidade() {
+		return this.lista.size();
 	}
 	
 	
