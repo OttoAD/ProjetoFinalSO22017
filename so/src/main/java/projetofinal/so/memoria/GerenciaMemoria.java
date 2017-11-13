@@ -13,9 +13,24 @@ public class GerenciaMemoria implements MemoriaRAM {
 	public void mostrarMemoria () {
 		int[] memReal = memoria.getMemReal();
 		int[] memUser = memoria.getMemUsuario();
+		String mostrarReal = "[";
+		String mostrarUsuario = "[";
 		
-		System.out.println("O vetor de memoria de tempo real esta representado por: " + memReal);
-		System.out.println("O vetor de memoria de usuario esta representado por: " + memUser);
+		for (int i : memReal) {
+			mostrarReal += (i+"|");
+		}
+		mostrarReal = mostrarReal.substring(0, mostrarReal.length()-1); //remover ultimo char
+		mostrarReal += "]";
+		System.out.println("Memoria de tempo real");
+		System.out.println(mostrarReal);
+		
+		for (int i : memUser) {
+			mostrarUsuario += (i+"|");
+		}
+		mostrarUsuario = mostrarUsuario.substring(0, (mostrarUsuario.length()-1)); //remover ultimo char
+		mostrarUsuario += "]";
+		System.out.println("Memoria de usuário");
+		System.out.println(mostrarUsuario);
 	}
 	
 	/* Procura uma a primeira sequencia de X blocos livres sequenciais na memoria
@@ -76,14 +91,16 @@ public class GerenciaMemoria implements MemoriaRAM {
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
 			memAtual = memoria.getMemReal(); //obtem o estado atual da memoria de tempo real
 			for (int i = 0; i < memAtual.length; i++) { //percorre toda a memoria
-				memoria.setMemReal(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
+				if (memAtual[i] == processoID)
+					memoria.setMemReal(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
 			}
 			return true;
 		}
 		else { //processo de usuario
 			memAtual = memoria.getMemUsuario(); //obtem o estado atual da memoria de usuario
 			for (int i = 0; i < memAtual.length; i++) { //percorre toda a memoria
-				memoria.setMemUsuario(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
+				if (memAtual[i] == processoID)
+					memoria.setMemUsuario(0, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
 			}
 			return true;
 		}

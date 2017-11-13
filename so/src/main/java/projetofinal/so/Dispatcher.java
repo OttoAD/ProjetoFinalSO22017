@@ -102,6 +102,7 @@ public class Dispatcher{
 				
 				LOGGER.info("Memoria disponivel na posicao " + posicaoMemoria);
 				memoriaDoPC.alocaMemoria(processo.getID(), posicaoMemoria, processo.getBlocosMemoria(), processo.getPrioridade());
+				memoriaDoPC.mostrarMemoria();
 				try {
 					meusProcessos.moverProcesso(processo);
 				} catch (ProcessoInexistenteException e2) {
@@ -137,7 +138,8 @@ public class Dispatcher{
 			
 			if (processo.getTempoProcessador() == 0) { //esgotou o processo
 				memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
-				LOGGER.info("Processo "+processo.getID()+" finalizou no clock " +clock);
+				LOGGER.info("Processo "+processo.getID()+" finalizou no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
+				memoriaDoPC.mostrarMemoria();
 			}
 			else { //mais 'Quantum's serão necessarios
 				//TODO: DIMINUIR A PRIORIDADE DO PROCESSO
