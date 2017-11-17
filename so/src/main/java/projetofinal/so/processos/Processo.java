@@ -2,7 +2,7 @@ package projetofinal.so.processos;
 
 public class Processo {
 
-	private int iD;
+	private char iD;
 	private int tempoInicializacao;
 	private int prioridade;
 	private int tempoProcessador;
@@ -104,11 +104,11 @@ public class Processo {
 		this.numeroCodigoDisco = numeroCodigoDisco;
 	}
 
-	public int getID() {
+	public char getID() {
 		return iD;
 	}
 
-	public void setID(int iD) {
+	public void setID(char iD) {
 		this.iD = iD;
 	}
 	

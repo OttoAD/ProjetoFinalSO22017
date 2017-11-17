@@ -15,8 +15,8 @@ public class InterfaceUsuario {
 			LeituraArquivoProcesso opa = new LeituraArquivoProcesso("teste.txt");
 			ListaProcesso lis = opa.lerArquivo();
 	    	System.out.println("LEITURA DO ARQUIVO FEITA");
-			System.out.println("Tempo de inicializacao do processo 1: "+lis.getProcessoPorIdentificador(1).getTempoInicializacao());
-			System.out.println("Tempo de processador do processo 2: "+lis.getProcessoPorIdentificador(2).getTempoProcessador());
+			System.out.println("Tempo de inicializacao do processo 1: "+lis.getProcessoPorIdentificador('1').getTempoInicializacao());
+			System.out.println("Tempo de processador do processo 2: "+lis.getProcessoPorIdentificador('2').getTempoProcessador());
 			System.out.println("Qtd de linhas do arquivo: "+opa.getTamanhoArquivo());
 			dispatcher = Dispatcher.obterInstancia();
 			dispatcher.novosProcessos(lis);
