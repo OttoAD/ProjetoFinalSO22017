@@ -4,7 +4,6 @@ import projetofinal.so.processos.Processo;
 
 public class GerenciaFila implements Escalonador {
 
-	public static final int QUANTUM = 1;
 	public static final int QUANTIDADEMAXIMA = 1000;
 	private Fila processosTempoReal;
 	private Fila processosPrioridade1;
@@ -24,30 +23,21 @@ public class GerenciaFila implements Escalonador {
 		return quantidade == 0 ? true : false;
 	}
 	
-	public boolean escalonarProcesso(Processo process) {
-		if((process != null) && (this.quantidade < QUANTIDADEMAXIMA)) {
-			int prioridade = process.getPrioridade();
-			
-			if(prioridade == 0) {
-				processosTempoReal.inserirProcesso(process);
-				this.quantidade++;
-				return true;
-			}else if(prioridade == 1) {
-				processosPrioridade1.inserirProcesso(process);
-				this.quantidade++;
-				return true;
-			}else if(prioridade == 2) {
-				processosPrioridade2.inserirProcesso(process);
-				this.quantidade++;
-				return true;
-			}else if(prioridade == 3) {
-				processosPrioridade3.inserirProcesso(process);
-				this.quantidade++;
-				return true;
-			}		
-		}
-		
-		return false;
+	public void escalonarProcesso(Processo process) {
+		int prioridade = process.getPrioridade();
+		if(prioridade == 0) {
+			processosTempoReal.inserirProcesso(process);
+			this.quantidade++;
+		}else if(prioridade == 1) {
+			processosPrioridade1.inserirProcesso(process);
+			this.quantidade++;
+		}else if(prioridade == 2) {
+			processosPrioridade2.inserirProcesso(process);
+			this.quantidade++;
+		}else if(prioridade == 3) {
+			processosPrioridade3.inserirProcesso(process);
+			this.quantidade++;
+		}	
 	}
 
 	public Processo proximoProcesso() {
@@ -74,25 +64,8 @@ public class GerenciaFila implements Escalonador {
 			if(prioridade>=0 && prioridade<3) {
 				prioridade++;
 				process.setPrioridade(prioridade);
-				escalonarProcesso(process);
 			}
+			escalonarProcesso(process);
 		}
 	}
-	
-	public int executarProcesso(Processo processo) {
-		int tempoTotal = processo.getTempoProcessador();
-		processo.setTempoProcessador(0);
-		System.out.println("Processo "+processo.getID()+ " foi executado por "+tempoTotal+ " unidades de tempo");
-		return tempoTotal;
-	}
-	
-	public int executarQuantum(Processo processo) {
-		int tempoRestante = processo.getTempoProcessador();
-		int tempoExecutado = tempoRestante <= QUANTUM ? tempoRestante : QUANTUM; //executa durante o minimo entre restante e QUANTUM 
-		processo.setTempoProcessador(tempoRestante-tempoExecutado); //atualiza o tempo restante
-		System.out.println("Processo "+processo.getID()+ " ainda deve ser executado por "+tempoRestante+ " unidades de tempo");
-		return tempoExecutado;
-	}
-	
-
 }

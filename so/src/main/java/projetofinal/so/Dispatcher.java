@@ -17,6 +17,7 @@ import projetofinal.so.recursos.GerenciaRecurso;
 
 public class Dispatcher{
 
+	public static final int QUANTUM = 1;
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	private static Dispatcher instancia;
 	
@@ -92,9 +93,12 @@ public class Dispatcher{
 					} catch (ProcessoInexistenteException e2) {
 						e2.printStackTrace();
 					}
+					indiceProcesso++;
+					LOGGER.info("Memória pequena demais para o processo " + processo.getID());
+					continue;
 				}
 				
-				if (posicaoMemoria == -1) { //Não há memória disponível no momento
+				if (posicaoMemoria == -1) { //Não há memória disponível NO MOMENTO OTÁVIO, haverá um dia...
 					indiceProcesso++;
 					LOGGER.info("Memoria insuficiente para o processo " + processo.getID());
 					continue;
@@ -108,18 +112,8 @@ public class Dispatcher{
 				} catch (ProcessoInexistenteException e2) {
 					e2.printStackTrace();
 				}
-					
-				try {
-					escalonador.escalonarProcesso(processo);
-				} catch (Exception e) {
-					// TODO: definir exception
-					// Escalonador cheio
-					try {
-						meusProcessos.excluirProcesso(processo);
-					} catch (ProcessoInexistenteException e1) {
-						e1.printStackTrace();
-					}
-				}
+				
+				escalonador.escalonarProcesso(processo);
 			}
 				
 		} while (processo != null);
@@ -130,24 +124,32 @@ public class Dispatcher{
 		
 		processo = escalonador.proximoProcesso();
 		if (processo != null) {
-			if (processo.getPrioridade() == 0) { //JONAS FEZ ESSE BLOCO DE CODIGO
-				clock += escalonador.executarProcesso(processo); //executar processo ate o fim
-			} else { 
-				clock += escalonador.executarQuantum(processo);
-			}
+			clock += executarProcesso(processo);
 			
 			if (processo.getTempoProcessador() == 0) { //esgotou o processo
 				memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
 				LOGGER.info("Processo "+processo.getID()+" finalizou no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
 				memoriaDoPC.mostrarMemoria();
-			}
-			else { //mais 'Quantum's serão necessarios
-				//TODO: DIMINUIR A PRIORIDADE DO PROCESSO
-				escalonador.escalonarProcesso(processo);
+			} else { //mais 'Quantum's serão necessarios
+				escalonador.diminuirPrioridade(processo);
 			}
 		}
 		else { //nenhum processo a ser executado
 			clock++;
 		}
 	}	
+
+	public int executarProcesso(Processo processo) {
+		int tempoTotal = processo.getTempoProcessador();
+		if (processo.getPrioridade() == 0) {
+			processo.setTempoProcessador(0);
+			LOGGER.info("Processo "+processo.getID()+ " foi executado por "+tempoTotal+ " unidades de tempo");
+			return tempoTotal;
+		} else {
+			int tempoExecutado = tempoTotal <= QUANTUM ? tempoTotal : QUANTUM; //executa durante o minimo entre restante e QUANTUM 
+			processo.setTempoProcessador(tempoTotal-tempoExecutado); //atualiza o tempo restante
+			LOGGER.info("Processo "+processo.getID()+ " ainda deve ser executado por "+tempoTotal+ " unidades de tempo");
+			return tempoExecutado;
+		}
+	}
 }
