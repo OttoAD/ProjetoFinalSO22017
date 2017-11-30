@@ -85,8 +85,8 @@ public class LeituraArquivoProcesso {
 			processoTemporario.setTempoProcessador(Integer.parseInt(elementosLeitura[2]));
 			processoTemporario.setBlocosMemoria(Integer.parseInt(elementosLeitura[3]));
 			processoTemporario.setNumeroCodigoImpressora(Integer.parseInt(elementosLeitura[4]));
-			processoTemporario.setRequisicaoScanner(Integer.parseInt(elementosLeitura[5]));
-			processoTemporario.setRequisicaoModem(Integer.parseInt(elementosLeitura[6]));
+			processoTemporario.setRequisicaoScanner(Integer.parseInt(elementosLeitura[5]) == 0 ? false : true);
+			processoTemporario.setRequisicaoModem(Integer.parseInt(elementosLeitura[6]) == 0 ? false : true);
 			processoTemporario.setNumeroCodigoDisco(Integer.parseInt(elementosLeitura[7]));
 			
 			return processoTemporario;
