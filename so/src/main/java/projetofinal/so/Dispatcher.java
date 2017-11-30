@@ -128,38 +128,32 @@ public class Dispatcher{
 		processo = escalonador.proximoProcesso(); //tira processo da fila do escalonador
 		if (processo != null) {
 			
-			/*JONAS: ANTES DE EXECUTAR O PROCESSO ELE DEVE VERIFICAR SE OS RECURSOS ESTAO DISPONIVEIS
-			 * DEVE ALOCAR CASO ESTEJAM; NÃO EXECUTAR CASO CONTRARIO*/
-			if (!gerenciadorRecurso.possuiRecursos(processo)) {
-				if (gerenciadorRecurso.recursosLivres(processo)) {
-					gerenciadorRecurso.reservaRecursos(processo);
-				} else {
-					//Bloqueado
+			/*Processo já tem os recursos OU Processo conseguiu alocar os recursos*/
+			if (gerenciadorRecurso.possuiRecursos(processo) || gerenciadorRecurso.reservaRecursos(processo)) {
+				/*EXECUTANDO PROCESSO QUE JA TEM TUDO QUE PRECISA*/
+				clock += run(processo);
+				if (processo.getTempoProcessador() == 0) { //esgotou o processo
+					//TODO: TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO - usar gerenciaArquivos.fazTudo(processo) ou algo assim
+					memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
+					gerenciadorRecurso.freeRecursos(processo);
+					System.out.println("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
+					memoriaDoPC.mostrarMemoria();
+					
+					
+				} else { //mais 'Quantum's serão necessarios
+					escalonador.diminuirPrioridade(processo);
 				}
 			}
-			
-			
-			clock += run(processo);
-			
-			if (processo.getTempoProcessador() == 0) { //esgotou o processo
-				
-				//REALIZA TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO
-				//gerenciaArquivos.fazTudo(processo.getID()) ou algo assim
-				
-				memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
-				System.out.println("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
-				memoriaDoPC.mostrarMemoria();
-				
-				//Liberar recursos
-				
-			} else { //mais 'Quantum's serão necessarios
-				escalonador.diminuirPrioridade(processo);
+			else {
+				LOGGER.info("PROCESSO BLOQUEADO");
+				//processo está bloqueado por falta de recursos
+				//TODO: LIDAR COM BLOQUEIO
 			}
 		}
 		else { //nenhum processo a ser executado
 			clock++;
 		}
-	}	
+	}
 
 	public int run(Processo processo) {
 		int tempoTotal = processo.getTempoProcessador();

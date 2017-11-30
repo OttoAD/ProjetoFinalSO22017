@@ -20,8 +20,10 @@ public interface EntradaSaida {
 	/*Retorna TRUE se todos os recursos exigidos pelo processo estão livres*/
 	public boolean recursosLivres (Processo process);
 	
-	/*Reserva todos os recursos exigidos para execução do processo*/
-	public void reservaRecursos(Processo process);
+	/*Reserva todos os recursos exigidos para execução do processo
+	 *Retorna true se der certo
+	 *Retorna false se nem todos os recursos estiverem disponiveis*/
+	public boolean reservaRecursos(Processo process);
 	
 	/*retorna true se o recurso está reservao para o processo process
 	* retorna false otherwise*/
@@ -31,5 +33,8 @@ public interface EntradaSaida {
 	* retorna false caso algum deles ainda não tenha sido reservado
 	* OBS: Não verifica se está disponível, apenas se está reservado ou não*/
 	public boolean possuiRecursos(Processo process);
+
+	//libera todos os recursos já utilizados pelo processo
+	public void freeRecursos(Processo processo);
 
 }
