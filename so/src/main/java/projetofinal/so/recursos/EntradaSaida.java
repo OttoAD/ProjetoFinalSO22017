@@ -9,10 +9,10 @@ public interface EntradaSaida {
 	
 	/*retorna o processo ao qual o recurso está alocado
 	retorna -1 caso recurso esteja disponível*/
-	public int getProcessoConsumidor(int recurso_index);
+	public Processo getProcessoConsumidor(int recurso_index);
 	
 	//atribui recurso ao processo em questao
-	public void setRecursoToProcesso(int recurso_index, int processo_index);
+	public boolean setRecursoToProcesso(int recurso_index, Processo processo);
 	
 	//libera recurso para outros processos
 	public void freeRecurso (int recurso_index);

@@ -13,6 +13,7 @@ import projetofinal.so.processos.BancoDeProcessos;
 import projetofinal.so.processos.GerenciaProcesso;
 import projetofinal.so.processos.Processo;
 import projetofinal.so.processos.ProcessoInexistenteException;
+import projetofinal.so.recursos.EntradaSaida;
 import projetofinal.so.recursos.GerenciaRecurso;
 
 public class Dispatcher{
@@ -25,7 +26,7 @@ public class Dispatcher{
 	private BancoDeProcessos meusProcessos;
 	private GerenciaArquivo gerenciadorArquivo;
 	private Escalonador escalonador;
-	private GerenciaRecurso gerenciadorRecurso;
+	private EntradaSaida gerenciadorRecurso;
 	
 	private int clock;
 	
@@ -127,8 +128,16 @@ public class Dispatcher{
 			
 			/*JONAS: ANTES DE EXECUTAR O PROCESSO ELE DEVE VERIFICAR SE OS RECURSOS ESTAO DISPONIVEIS
 			 * DEVE ALOCAR CASO ESTEJAM; NÃO EXECUTAR CASO CONTRARIO*/
+			if (!gerenciadorRecurso.possuiRecursos(processo)) {
+				if (gerenciadorRecurso.recursosLivres(processo)) {
+					gerenciadorRecurso.reservaRecursos(processo);
+				} else {
+					//Bloqueado
+				}
+			}
 			
-			clock += executarProcesso(processo);
+			
+			clock += run(processo);
 			
 			if (processo.getTempoProcessador() == 0) { //esgotou o processo
 				
@@ -138,6 +147,9 @@ public class Dispatcher{
 				memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
 				LOGGER.info("Processo "+processo.getID()+" finalizou no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
 				memoriaDoPC.mostrarMemoria();
+				
+				//Liberar recursos
+				
 			} else { //mais 'Quantum's serão necessarios
 				escalonador.diminuirPrioridade(processo);
 			}
@@ -147,7 +159,7 @@ public class Dispatcher{
 		}
 	}	
 
-	public int executarProcesso(Processo processo) {
+	public int run(Processo processo) {
 		int tempoTotal = processo.getTempoProcessador();
 		if (processo.getPrioridade() == 0) {
 			processo.setTempoProcessador(0);
