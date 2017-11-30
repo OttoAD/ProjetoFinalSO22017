@@ -40,6 +40,14 @@ public class GerenciaRecurso implements EntradaSaida{
 		recursos[recurso_index] = -1;
 	}
 	
+	/*Libera todos os recursos já utilizados pelo processo*/
+	public void processoLiberaRecursos (Processo process) {
+		for (int i = 0; i < recursos.length; i++) { //passa por todos os recursos
+			if (this.recursoEstaComProcesso(i, process)) //se o recurso está com o processo...
+				freeRecurso(i); //...liberar o recurso
+		}
+	}
+	
 	//retorna TRUE se o recurso está reservado ao processo process
 	public boolean recursoEstaComProcesso (int recurso, Processo process) {
 		return this.getProcessoConsumidor(recurso) == process.getID();
