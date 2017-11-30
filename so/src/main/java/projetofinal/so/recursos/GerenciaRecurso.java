@@ -41,8 +41,12 @@ public class GerenciaRecurso implements EntradaSaida{
 	}
 	
 	//retorna TRUE se o recurso está reservado ao processo process
-	public boolean recursoEstaComProcesso (int recurso, Processo process) {
-		return this.getProcessoConsumidor(recurso).getID() == process.getID();
+	public boolean recursoEstaComProcesso (int recurso_index, Processo process) {
+		if (recursos[recurso_index].getProcessoProprietario() == null)
+			return false; //nao há processo proprietario
+		else {
+			return recursos[recurso_index].getProcessoProprietario().getID() == process.getID();
+		}
 	}
 	
 	/*Retorna TRUE se todos os recursos exigidos pelo processo estão livres*/
@@ -104,9 +108,14 @@ public class GerenciaRecurso implements EntradaSaida{
 	}
 	
 	/*Reserva todos os recursos exigidos para execução do processo*/
-	public void reservaRecursos(Processo process) {
-
-		int processID = process.getID();
+	public boolean reservaRecursos(Processo process) {
+		
+		if (this.recursosLivres(process) == false) //verificar se os recursos estao livres 
+			return false; //nem todos os recursos necessários estão disponiveis: erro na reserva
+		
+		/*Se chegou aqui, os recursos livres estão disponiveis*/
+		char processID = process.getID();
+		System.out.println("Processo "+processID+" recebeu os recursos necessários para sua execução");
 		
 		if (process.getRequisicaoModem())
 			this.setRecursoToProcesso(MODEM, process); //atribui modem ao processo, se necessário
@@ -131,6 +140,13 @@ public class GerenciaRecurso implements EntradaSaida{
 			break;
 		}
 		
-		return;
+		return true;
+	}
+
+	public void freeRecursos(Processo process) {
+		for (int i = 0; i < recursos.length; i++) { //para cada recurso
+			if (recursoEstaComProcesso(i, process)) //se o recurso esta com o processo em questao
+				freeRecurso(i);						//liberar recurso
+		}
 	}
 }
