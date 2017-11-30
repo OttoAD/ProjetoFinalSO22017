@@ -84,7 +84,7 @@ public class Dispatcher{
 			
 			if (processo != null) {
 				
-				LOGGER.info("Criando o processo " + processo.getID());
+				System.out.println("Criando o processo " + processo.getID());
 				try {
 					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
 				} catch (MemoriaInsuficienteException e) {
@@ -95,18 +95,20 @@ public class Dispatcher{
 						e2.printStackTrace();
 					}
 					indiceProcesso++;
-					LOGGER.info("Memória pequena demais para o processo " + processo.getID());
+					System.out.println("Erro - Memória pequena demais para o processo " + processo.getID());
+					printProcess(processo);
 					continue;
 				}
 				
 				if (posicaoMemoria == -1) { //Não há memória disponível NO MOMENTO OTÁVIO, haverá um dia...
 					indiceProcesso++;
-					LOGGER.info("Memoria insuficiente para o processo " + processo.getID());
+					System.out.println("Memoria insuficiente para o processo " + processo.getID());
 					continue;
 				}
 				
 				LOGGER.info("Memoria disponivel na posicao " + posicaoMemoria);
 				memoriaDoPC.alocaMemoria(processo.getID(), posicaoMemoria, processo.getBlocosMemoria(), processo.getPrioridade());
+				printProcess(processo);
 				memoriaDoPC.mostrarMemoria();
 				try {
 					meusProcessos.moverProcesso(processo);
@@ -119,7 +121,7 @@ public class Dispatcher{
 				
 		} while (processo != null);
 	}
-	
+
 	private void executarProcesso() {
 		Processo processo;
 		
@@ -145,7 +147,7 @@ public class Dispatcher{
 				//gerenciaArquivos.fazTudo(processo.getID()) ou algo assim
 				
 				memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
-				LOGGER.info("Processo "+processo.getID()+" finalizou no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
+				System.out.println("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
 				memoriaDoPC.mostrarMemoria();
 				
 				//Liberar recursos
@@ -163,13 +165,25 @@ public class Dispatcher{
 		int tempoTotal = processo.getTempoProcessador();
 		if (processo.getPrioridade() == 0) {
 			processo.setTempoProcessador(0);
-			LOGGER.info("Processo "+processo.getID()+ " foi executado por "+tempoTotal+ " unidades de tempo");
+			System.out.println("Processo "+processo.getID()+ " finalizado após "+tempoTotal+ " unidades de tempo");
 			return tempoTotal;
 		} else {
 			int tempoExecutado = tempoTotal <= QUANTUM ? tempoTotal : QUANTUM; //executa durante o minimo entre restante e QUANTUM 
 			processo.setTempoProcessador(tempoTotal-tempoExecutado); //atualiza o tempo restante
-			LOGGER.info("Processo "+processo.getID()+ " ainda deve ser executado por "+tempoTotal+ " unidades de tempo");
+			System.out.println("Processo "+processo.getID()+ " possui "+tempoTotal+ " unidades de tempo restantes");
 			return tempoExecutado;
 		}
+	}
+	
+	private void printProcess(Processo process) {
+		System.out.println("dispatcher =>");
+		System.out.println("\tPID: "+process.getID());
+		System.out.println("\tpriority: "+process.getPrioridade());
+		System.out.println("\ttime: "+process.getTempoProcessador());
+		System.out.println("\tprinter: "+process.getNumeroCodigoImpressora());
+		System.out.println("\tscanner: "+process.getRequisicaoScanner());
+		System.out.println("\tmodem: "+process.getRequisicaoModem());
+		System.out.println("\tSATA disc: "+process.getNumeroCodigoDisco());
+		return;
 	}
 }
