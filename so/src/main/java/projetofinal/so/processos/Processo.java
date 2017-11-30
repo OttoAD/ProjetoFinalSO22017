@@ -8,8 +8,8 @@ public class Processo {
 	private int tempoProcessador;
 	private int blocosMemoria;
 	private int numeroCodigoImpressora;
-	private int requisicaoScanner;
-	private int requisicaoModem;
+	private boolean requisicaoScanner;
+	private boolean requisicaoModem;
 	private int numeroCodigoDisco;
 	
 	public Processo() {
@@ -19,8 +19,8 @@ public class Processo {
 		this.tempoProcessador = 0;
 		this.blocosMemoria = 0;
 		this.numeroCodigoImpressora = 0;
-		this.requisicaoScanner = 0;
-		this.requisicaoModem = 0;
+		this.requisicaoScanner = false;
+		this.requisicaoModem = false;
 		this.numeroCodigoDisco = 0;
 	}
 	
@@ -56,11 +56,11 @@ public class Processo {
 		return this.numeroCodigoImpressora;
 	}
 	
-	public int getRequisicaoScanner() {
+	public boolean getRequisicaoScanner() {
 		return this.requisicaoScanner;
 	}
 
-	public int getRequisicaoModem() {
+	public boolean getRequisicaoModem() {
 		return this.requisicaoModem;
 	}
 	
@@ -92,11 +92,11 @@ public class Processo {
 		this.numeroCodigoImpressora = numeroCodigoImpressora;
 	}
 	
-	public void setRequisicaoScanner(int requisicaoScanner) {
+	public void setRequisicaoScanner(boolean requisicaoScanner) {
 		this.requisicaoScanner = requisicaoScanner;
 	}
 
-	public void setRequisicaoModem(int requisicaoModem) {
+	public void setRequisicaoModem(boolean requisicaoModem) {
 		this.requisicaoModem = requisicaoModem;
 	}
 	

@@ -122,11 +122,19 @@ public class Dispatcher{
 	private void executarProcesso() {
 		Processo processo;
 		
-		processo = escalonador.proximoProcesso();
+		processo = escalonador.proximoProcesso(); //tira processo da fila do escalonador
 		if (processo != null) {
+			
+			/*JONAS: ANTES DE EXECUTAR O PROCESSO ELE DEVE VERIFICAR SE OS RECURSOS ESTAO DISPONIVEIS
+			 * DEVE ALOCAR CASO ESTEJAM; NÃO EXECUTAR CASO CONTRARIO*/
+			
 			clock += executarProcesso(processo);
 			
 			if (processo.getTempoProcessador() == 0) { //esgotou o processo
+				
+				//REALIZA TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO
+				//gerenciaArquivos.fazTudo(processo.getID()) ou algo assim
+				
 				memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
 				LOGGER.info("Processo "+processo.getID()+" finalizou no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
 				memoriaDoPC.mostrarMemoria();
