@@ -22,5 +22,14 @@ public interface EntradaSaida {
 	
 	/*Reserva todos os recursos exigidos para execução do processo*/
 	public void reservaRecursos(Processo process);
+	
+	/*retorna true se o recurso está reservao para o processo process
+	* retorna false otherwise*/
+	public boolean recursoEstaComProcesso (int recurso, Processo process);
+	
+	/*retorna true se o processo já possui todos os recursos que ele precisa
+	* retorna false caso algum deles ainda não tenha sido reservado
+	* OBS: Não verifica se está disponível, apenas se está reservado ou não*/
+	public boolean possuiRecursos(Processo process);
 
 }

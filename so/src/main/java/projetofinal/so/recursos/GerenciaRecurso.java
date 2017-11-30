@@ -40,36 +40,67 @@ public class GerenciaRecurso implements EntradaSaida{
 		recursos[recurso_index] = -1;
 	}
 	
+	//retorna TRUE se o recurso está reservado ao processo process
+	public boolean recursoEstaComProcesso (int recurso, Processo process) {
+		return this.getProcessoConsumidor(recurso) == process.getID();
+	}
+	
 	/*Retorna TRUE se todos os recursos exigidos pelo processo estão livres*/
 	public boolean recursosLivres (Processo process) {
 		
-		if (process.getRequisicaoModem() && !recursoLivre(MODEM))
+		if (process.getRequisicaoModem() && !this.recursoLivre(MODEM))
 			return false; //quero Modem mas ele nao está livre
 		
-		if (process.getRequisicaoScanner() && !recursoLivre(SCANNER))
+		if (process.getRequisicaoScanner() && !this.recursoLivre(SCANNER))
 			return false; //quero Scanner mas ele nao está livre
 		
 		boolean resultado = true;
 		
 		switch (process.getNumeroCodigoImpressora()) {
 			case 1:
-				resultado &= recursoLivre(IMPRESSORA_1); //verificar se impressora 1 está livre 
+				resultado &= this.recursoLivre(IMPRESSORA_1); //verificar se impressora 1 está livre 
 				break;
 			case 2:
-				resultado &= recursoLivre(IMPRESSORA_2); //verificar se impressora 2 está livre
+				resultado &= this.recursoLivre(IMPRESSORA_2); //verificar se impressora 2 está livre
 				break;
 		}
 		
 		switch (process.getNumeroCodigoDisco()) {
 		case 1:
-			resultado &= recursoLivre(SATA_1); //verificar se disco 1 está livre 
+			resultado &= this.recursoLivre(SATA_1); //verificar se disco 1 está livre 
 			break;
 		case 2:
-			resultado &= recursoLivre(SATA_2); //verificar se disco 2 está livre
+			resultado &= this.recursoLivre(SATA_2); //verificar se disco 2 está livre
 			break;
 		}						
 			
 		return resultado; //ainda será true caso esteja tudo ok
+	}
+	
+	/*retorna true se o processo já possui todos os recursos que ele precisa*/
+	/*retorna false caso algum deles ainda não tenha sido reservado*/
+	/*OBS: Não verifica se está disponível, apenas se está reservado ou não*/
+	public boolean possuiRecursos(Processo process) {
+		
+		if (process.getRequisicaoModem() && !recursoEstaComProcesso(MODEM, process))
+			return false; //quero Modem && ele não está comigo
+		
+		if (process.getRequisicaoScanner() && !recursoEstaComProcesso(SCANNER, process))
+			return false; //quero Scanner && ele não está comigo
+		
+		if ((process.getNumeroCodigoImpressora() == 1) && !recursoEstaComProcesso(IMPRESSORA_1, process))
+			return false; //quero Imressora 1 && ela não está comigo
+		
+		if ((process.getNumeroCodigoImpressora() == 2) && !recursoEstaComProcesso(IMPRESSORA_2, process))
+			return false; //quero Imressora 2 && ela não está comigo
+		
+		if ((process.getNumeroCodigoDisco() == 1) && !recursoEstaComProcesso(SATA_1, process))
+			return false; //quero SATA 1 && ele não está comigo
+		
+		if ((process.getNumeroCodigoDisco() == 2) && !recursoEstaComProcesso(SATA_2, process))
+			return false; //quero SATA 1 && ele não está comigo
+		
+		return true;
 	}
 	
 	/*Reserva todos os recursos exigidos para execução do processo*/
@@ -77,25 +108,25 @@ public class GerenciaRecurso implements EntradaSaida{
 		int processID = process.getID();
 		
 		if (process.getRequisicaoModem())
-			setRecursoToProcesso(MODEM, processID); //atribui modem ao processo, se necessário
+			this.setRecursoToProcesso(MODEM, processID); //atribui modem ao processo, se necessário
 		if (process.getRequisicaoScanner())
-			setRecursoToProcesso(SCANNER, processID); //atribui scanner ao processo, se necessário
+			this.setRecursoToProcesso(SCANNER, processID); //atribui scanner ao processo, se necessário
 		
 		switch (process.getNumeroCodigoImpressora()) { //verifica qual impressora o processo quer, se houver
 		case 1:
-			setRecursoToProcesso(IMPRESSORA_1, processID); //atribui impressora 1 
+			this.setRecursoToProcesso(IMPRESSORA_1, processID); //atribui impressora 1 
 			break;
 		case 2:
-			setRecursoToProcesso(IMPRESSORA_2, processID); //atribui impressora 2
+			this.setRecursoToProcesso(IMPRESSORA_2, processID); //atribui impressora 2
 			break;
 		}
 		
 		switch (process.getNumeroCodigoDisco()) { //verifica qual disco SATA o processo quer, se houver
 		case 1:
-			setRecursoToProcesso(SATA_1, processID); //atribui SATA1
+			this.setRecursoToProcesso(SATA_1, processID); //atribui SATA1
 			break;
 		case 2:
-			setRecursoToProcesso(SATA_2, processID); //atribui SATA2
+			this.setRecursoToProcesso(SATA_2, processID); //atribui SATA2
 			break;
 		}
 		
