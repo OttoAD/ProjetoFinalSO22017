@@ -15,15 +15,9 @@ public class LeituraArquivoProcesso {
 	private String nomeArquivoEntrada;
 	private int tamanhoArquivo;
 	
-	public LeituraArquivoProcesso(String nomeArquivoEntrada) throws LeituraArquivoException{
+	public LeituraArquivoProcesso(String nomeArquivoEntrada){
 		this.nomeArquivoEntrada = nomeArquivoEntrada;
 		tamanhoArquivo = 0;
-		File novoArquivo = new File(nomeArquivoEntrada);
-		try {
-			novoArquivo.createNewFile();
-		}catch(IOException io) {
-			throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser criado",io);
-		}
 
 	}
 	

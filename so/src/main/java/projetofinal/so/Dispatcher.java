@@ -3,6 +3,7 @@ package projetofinal.so;
 import java.util.logging.Logger;
 
 import projetofinal.so.arquivos.GerenciaArquivo;
+import projetofinal.so.dados.LeituraArquivoException;
 import projetofinal.so.dados.processo.ListaProcesso;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
@@ -30,20 +31,24 @@ public class Dispatcher{
 	
 	private int clock;
 	
-	private void iniciaGerencia() {
+	private void iniciaGerencia() throws GerenciaException {
+		try {
 		this.memoriaDoPC = new GerenciaMemoria();
 		this.meusProcessos = new GerenciaProcesso();
 		this.gerenciadorArquivo = new GerenciaArquivo();
 		this.escalonador = new GerenciaFila();
 		this.gerenciadorRecurso = new GerenciaRecurso();
+		}catch(LeituraArquivoException lae) {
+			throw new GerenciaException("Houve um erro na criação das gerências",lae);
+		}
 		
 	}
 	
-	private Dispatcher() {		
+	private Dispatcher() throws GerenciaException {		
 		iniciaGerencia();
 	}
 	
-	public static Dispatcher obterInstancia() {
+	public static Dispatcher obterInstancia() throws GerenciaException {
 		if (instancia == null) {
 			instancia = new Dispatcher();
 		}
