@@ -12,6 +12,6 @@ public interface Disco {
 
 	public void criarArquivo(int idProcesso, Arquivo arq);//criar um arquivo no disco
 	
-	//public ? lerArquivo(int idProcesso);
+	public void buscarArquivo(); //tem que ver o retorno e os parametros
 
 }

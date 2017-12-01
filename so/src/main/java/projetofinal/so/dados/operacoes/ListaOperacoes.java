@@ -10,7 +10,7 @@ public class ListaOperacoes {
 		lista = new ArrayList<Operacao>();
 	}
 	
-	public void adicionarArquivo(Operacao op){
+	public void adicionarOperacao(Operacao op){
 		this.lista.add(op);
 	}
 	
