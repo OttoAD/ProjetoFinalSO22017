@@ -131,7 +131,7 @@ public class Dispatcher{
 				if (processo.getTempoProcessador() == 0) { //esgotou o processo
 					//TODO: TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO - usar gerenciaArquivos.fazTudo(processo) ou algo assim
 					//gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
-					//gerenciadorArquivo.mostrarDisco();
+					gerenciadorArquivo.mostrarDisco();
 					memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
 					gerenciadorRecurso.freeRecursos(processo);
 					System.out.println("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao

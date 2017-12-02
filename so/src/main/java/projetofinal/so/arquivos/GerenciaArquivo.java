@@ -29,7 +29,7 @@ public class GerenciaArquivo implements Disco {
 		this.quantidadeSegmentosOcupadosDisco = dadosIniciais[1];
 		this.arquivos = leitura.lerArquivos();
 		this.operacoes = leitura.lerOperacoes();
-		this.espacoDisco = new char[quantidadeBlocosDisco];
+		this.espacoDisco = new Arquivo[quantidadeBlocosDisco];
 		setarDiscoInicial(this.arquivos);
 	}
 
@@ -46,58 +46,6 @@ public class GerenciaArquivo implements Disco {
 		this.quantidadeSegmentosOcupadosDisco = quantidadeSegmentosOcupadosDisco;
 	}
 	
-	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) throws EspacoDiscoInsuficienteException {
-		ArrayList<Operacao> toExecute = operacoes.getOperacoesProcesso(idProcesso);
-		
-		for (Operacao operacao : toExecute) {
-			int acao = operacao.getCodigoOperacao();
-			
-			if (acao == 0) { //criacao de arquivo
-				criarArquivo(idProcesso,
-						new Arquivo(operacao.getNomeArquivo(),-1, operacao.getTamanho(), idProcesso));
-			}
-			else if (acao == 1) { //remocao de arquivo
-				removerArquivo(idProcesso, prioridadeProcesso, arq);
-			}
-			else {
-				throw new OperacaoInexistenteException("O código da operação é inválido");
-			}
-		}
-	}
-
-	public void removerArquivo(int idProcessoChamador, int prioridadeProcesso, int processoDono, char nomeArquivo) throws PermissaoNegadaException {
-		if (prioridadeProcesso != 0 && idProcessoChamador != processoDono) 
-			throw new PermissaoNegadaException("O processo "+idProcessoChamador+" nao possui permissão para deletar o arquivo "+nomeArquivo); //processo nao eh de tempo real nem dono do arquivo: nao pode remover
-		else {
-			/*DELETAR ARQUIVO*/
-			for (char i : espacoDisco) {
-				if (i == nomeArquivo) //bloco de disco atual pertence ao processo
-					this.espacoDisco[i] = 0; //liberar espaco em disco
-			}
-		}
-	}
-	
-	/* Procura uma a primeira sequencia de X blocos livres sequenciais no disco
-	 * Retorna a posição incial da sequencia no vetor de disco 
-	 * Retorna -1 se nao encontrar espaco*/
-	
-	public int espacoEmDisco (int quantidadeBlocos) {
-		int nVazios = 0;
-		for (int blCorrente : espacoDisco) { //percorre o disco buscando alocacao
-			if (espacoDisco[blCorrente] == 0) { //bloco de disco livre
-				nVazios++;
-				if (nVazios == quantidadeBlocos) { //encontrado o 'First Fit'
-					return (blCorrente-nVazios+1); //retorna a posicao inicial do vetor de blocos livres
-				}
-			}
-			else { //bloco ocupado; reiniciar contagem
-				nVazios = 0;
-			}
-			blCorrente++;
-		}
-		return -1;
-	}
-
 	private void setarDiscoInicial(ListaArquivos arquivos) {
 		Arquivo arqCorrente = null;
 		int blInicial = -1, tamanho = -1;
@@ -106,45 +54,107 @@ public class GerenciaArquivo implements Disco {
 				arqCorrente = arquivos.getArquivoPorIndice(i);
 				blInicial = arqCorrente.getNumeroBloco(); //recupera onde o arq comeca
 				tamanho = arqCorrente.getTamanho();
-				for (int j = blInicial; j < blInicial+tamanho; j++) {
-					espacoDisco[j] = arqCorrente.getNomeArquivo(); //seta os blocos do arquivo no disco
+				
+				for (int blocoCorrente = blInicial; blocoCorrente < (blInicial + tamanho); blocoCorrente++) {
+					espacoDisco[blocoCorrente] = arqCorrente; //seta os blocos do arquivo no disco
+				}
+				
+			}
+		} catch (ArquivoInexistenteException aie) {}
+	}
+	
+	/* Procura uma a primeira sequencia de X blocos livres sequenciais no disco
+	 * Retorna a posição incial da sequencia no vetor de disco 
+	 * Retorna -1 se nao encontrar espaco*/	
+	private int firstFit (int quantidadeBlocos) {
+		int nVazios = 0;
+		int enderecoBaseBloco = 0;
+		
+		for (int blocoCorrente = 0; blocoCorrente < this.quantidadeBlocosDisco; blocoCorrente++) { //percorre o disco buscando espaço vazio
+			if (espacoDisco[blocoCorrente] == null) { //bloco de disco livre
+				enderecoBaseBloco = blocoCorrente;
+				nVazios++;
+				if (nVazios == quantidadeBlocos) { //encontrou um espaço que cabe o arquivo
+					return (enderecoBaseBloco - nVazios); //retorna a posicao inicial do vetor de blocos livres
 				}
 			}
-		} catch (ArquivoInexistenteException e) {			
+			else { //bloco ocupado; reiniciar contagem
+				nVazios = 0;
+			}
 		}
-	}
 		
-
+		return -1;
+	}
+	
+	
 	public void criarArquivo(int idProcesso, Arquivo arq) throws EspacoDiscoInsuficienteException {
 		int tamanhoArquivo = arq.getTamanho();
 		
 		arq.setProcessoDono(idProcesso);
-		int posicao = espacoEmDisco(tamanhoArquivo);
-		if (posicao < 0) {
-			throw new EspacoDiscoInsuficienteException("Não há espaço em disco suficiente para o arquivo " +arq.getNomeArquivo());
+		int posicaoAlocacao = firstFit(tamanhoArquivo);
+		if (posicaoAlocacao < 0) {
+			throw new EspacoDiscoInsuficienteException("Não há espaço em disco suficiente para o arquivo " + arq.getNomeArquivo());
 		}
 		else {
-			this.setDiscoRange(arq.getNomeArquivo(), posicao, posicao+tamanhoArquivo); //seta no disco as posicoes preenchidas pelo arquivo
-			arq.setNumeroBloco(posicao); //define a posicao inicial do arquivo
+			arq.setNumeroBloco(posicaoAlocacao); //define a posicao inicial do arquivo
+			for (int i = posicaoAlocacao; i < (posicaoAlocacao+tamanhoArquivo); i++) {
+				espacoDisco[i] = arq;
+			}
 		}
 	}
 	
-	public void setDiscoRange(char nomeArquivo, int posicaoinicial, int posicaofinal) { //define um processo para uma sequ�ncia de blocos de memoria de processos em tempo real
-		for (int i = posicaoinicial; i < posicaofinal; i++) {
-			espacoDisco[i] = nomeArquivo;
+	public Arquivo buscarArquivoDisco(char nomeArquivo) throws ArquivoInexistenteException{
+			for (Arquivo arq : espacoDisco) {
+			if(arq.getNomeArquivo() == nomeArquivo) {
+				return arq;
+			}
 		}
-	}
-	
-	public void mostrarDisco() {
-		String mostrarDisco = "[";
 		
-		for (char i : espacoDisco) {
-			mostrarDisco += (i+"|");
+		throw new ArquivoInexistenteException("O arquivo não foi encontrado no disco");
+	}
+	
+	public void removerArquivo(int idProcessoChamador, int prioridadeProcesso, char nomeArquivo) throws PermissaoNegadaException, ArquivoInexistenteException {
+		Arquivo arq = buscarArquivoDisco(nomeArquivo);
+		arq.getNumeroBloco();
+		int bloco = arq.getNumeroBloco();
+		int tamanho = arq.getTamanho();
+		
+		if ((idProcessoChamador == 0) || (idProcessoChamador == arq.getProcessoDono())) {
+			for(int i = bloco ; i < (bloco+tamanho) ; i++) {
+				this.espacoDisco[i] = null;
+			}
+		}else {
+			throw new PermissaoNegadaException("O processo "+idProcessoChamador+" nao possui permissão para deletar o arquivo "+nomeArquivo);
 		}
-		mostrarDisco = mostrarDisco.substring(0, mostrarDisco.length()-1); //remover ultimo char
-		mostrarDisco += "]";
-		System.out.println("Disco do Sistema");
-		System.out.println(mostrarDisco);
+	}
+	
+	//TEM QUE REVER ESSA FUNÇÃO
+	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) throws EspacoDiscoInsuficienteException, PermissaoNegadaException, ArquivoInexistenteException, OperacaoInexistenteException {
+		ArrayList<Operacao> toExecute = operacoes.getOperacoesProcesso(idProcesso);
+		char nomeArquivo;
+		
+		for (Operacao operacao : toExecute) {
+			int acao = operacao.getCodigoOperacao();
+			nomeArquivo = operacao.getNomeArquivo();
+			if (acao == 0) { //criacao de arquivo
+				criarArquivo(idProcesso, new Arquivo(nomeArquivo,-1, operacao.getTamanho(), idProcesso));
+			}
+			else if (acao == 1) { //remocao de arquivo
+				removerArquivo(idProcesso, prioridadeProcesso, nomeArquivo);
+			}
+			else {
+				throw new OperacaoInexistenteException("O código " + acao + " de operação é inválido");
+			}
+		}
+	}
+
+	public void mostrarDisco() {
+		System.out.println("---------- BLOCOS DO DISCO ----------");
+		System.out.print("[");
+		for (Arquivo arq : espacoDisco) {
+			System.out.print(arq.getNomeArquivo()+"|");
+		}
+		System.out.println("]");
 		
 	}
 }
