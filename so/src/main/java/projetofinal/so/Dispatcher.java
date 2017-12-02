@@ -2,6 +2,7 @@ package projetofinal.so;
 
 import java.util.logging.Logger;
 
+import projetofinal.so.arquivos.Disco;
 import projetofinal.so.arquivos.GerenciaArquivo;
 import projetofinal.so.dados.LeituraArquivoException;
 import projetofinal.so.dados.processo.ListaProcesso;
@@ -25,7 +26,7 @@ public class Dispatcher{
 	
 	private MemoriaRAM memoriaDoPC;
 	private BancoDeProcessos meusProcessos;
-	private GerenciaArquivo gerenciadorArquivo;
+	private Disco gerenciadorArquivo;
 	private Escalonador escalonador;
 	private EntradaSaida gerenciadorRecurso;
 	
@@ -65,13 +66,8 @@ public class Dispatcher{
 			//ou processos no escalonador
 			LOGGER.info("Clock " + clock);
 			criarProcesso();
-			
 			executarProcesso();
-			
-		}
-		
-		//memoriaDoPC.mostrarMemoria();
-		
+		}	
 	}
 	
 	private void criarProcesso() {
@@ -89,19 +85,18 @@ public class Dispatcher{
 				try {
 					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
 				} catch (MemoriaInsuficienteException e) {
-					e.printStackTrace();
+					System.out.println("Erro - Memória pequena demais para o processo " + processo.getID());
 					try {
 						meusProcessos.excluirProcesso(processo);						
 					} catch (ProcessoInexistenteException e2) {
 						e2.printStackTrace();
 					}
 					indiceProcesso++;
-					System.out.println("Erro - Memória pequena demais para o processo " + processo.getID());
 					printProcess(processo);
 					continue;
 				}
 				
-				if (posicaoMemoria == -1) { //Não há memória disponível NO MOMENTO OTÁVIO, haverá um dia...
+				if (posicaoMemoria == -1) { //Não há memória disponível no momento, mas haverá posteriormente...
 					indiceProcesso++;
 					System.out.println("Memoria insuficiente para o processo " + processo.getID());
 					continue;

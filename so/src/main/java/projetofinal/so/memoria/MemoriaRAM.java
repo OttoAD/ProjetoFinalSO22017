@@ -10,12 +10,12 @@ public interface MemoriaRAM {
 	
 	/* Aloca 'tamanhoBloco' espacos de memoria a partir de uma posicao inicial do vetor
 	 * Tais espacos serao atribuidos ao processoID */
-	public void alocaMemoria (char processoID, int posicaoInicial, int tamanhoBloco, int prioridade);
+	public void alocaMemoria (int i, int posicaoInicial, int tamanhoBloco, int prioridade);
 	
 	/*
 	 * desaloca todos os blocos de memoria alocados ao processo de um ID especificado
 	 * A prioridade do processo define se o processo de desalocacao deve ser feito na memoria de usuario ou de tempo real*/
-	public boolean desalocarProcesso(char processoID, int prioridade);
+	public boolean desalocarProcesso(int i, int prioridade);
 	
 	/* Realiza amostragem na tela dos vetores de blocos de memória (real e de usuario) */
 	public void mostrarMemoria();

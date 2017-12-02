@@ -24,7 +24,7 @@ public class GerenciaArquivo implements Disco{
 		this.quantidadeSegmentosOcupadosDisco = dadosIniciais[1];
 		this.arquivos = leitura.lerArquivos();
 		this.operacoes = leitura.lerOperacoes();
-		espacoDisco = new char[quantidadeBlocosDisco];
+		this.espacoDisco = new char[quantidadeBlocosDisco];
 	}
 	
 	public int getQuantidadeBlocosDisco() {
@@ -49,19 +49,15 @@ public class GerenciaArquivo implements Disco{
 	@Override
 	public void removerArquivo(int idProcesso, Arquivo arq) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void criarArquivo(int idProcesso, Arquivo arq) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
 	public void buscarArquivo() {
 		// TODO Auto-generated method stub
-		
 	}
-	
 }

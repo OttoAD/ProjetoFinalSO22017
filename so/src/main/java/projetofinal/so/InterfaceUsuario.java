@@ -14,7 +14,6 @@ public class InterfaceUsuario {
 			try {
 				dispatcher = Dispatcher.obterInstancia();
 			} catch (GerenciaException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			dispatcher.executarProcessos();

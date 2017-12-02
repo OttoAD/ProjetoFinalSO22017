@@ -114,7 +114,7 @@ public class GerenciaRecurso implements EntradaSaida{
 			return false; //nem todos os recursos necessários estão disponiveis: erro na reserva
 		
 		/*Se chegou aqui, os recursos livres estão disponiveis*/
-		char processID = process.getID();
+		int processID = process.getID();
 		System.out.println("Processo "+processID+" recebeu os recursos necessários para sua execução");
 		
 		if (process.getRequisicaoModem())
