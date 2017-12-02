@@ -85,14 +85,13 @@ public class Dispatcher{
 				try {
 					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
 				} catch (MemoriaInsuficienteException e) {
-					e.printStackTrace();
+					System.out.println("Erro - Memória pequena demais para o processo " + processo.getID());
 					try {
 						meusProcessos.excluirProcesso(processo);						
 					} catch (ProcessoInexistenteException e2) {
 						e2.printStackTrace();
 					}
 					indiceProcesso++;
-					System.out.println("Erro - Memória pequena demais para o processo " + processo.getID());
 					printProcess(processo);
 					continue;
 				}
