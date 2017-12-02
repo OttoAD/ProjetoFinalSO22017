@@ -1,12 +1,18 @@
 package projetofinal.so.processos;
+
+import projetofinal.so.dados.LeituraArquivoException;
+import projetofinal.so.dados.processo.LeituraArquivoProcesso;
 import projetofinal.so.dados.processo.ListaProcesso;
+
 public class GerenciaProcesso implements BancoDeProcessos{
 	
+	public static final String NOMEARQUIVOPROCESSOS = "processes.txt";
 	private ListaProcesso processosNaoAlocados;
 	private ListaProcesso processosAlocados;
 	
-	public GerenciaProcesso() {
-		this.processosNaoAlocados = new ListaProcesso();
+	public GerenciaProcesso() throws LeituraArquivoException {
+		LeituraArquivoProcesso processosLidos = new LeituraArquivoProcesso(NOMEARQUIVOPROCESSOS);
+		this.processosNaoAlocados = processosLidos.lerArquivo();
 		this.processosAlocados = new ListaProcesso();
 	}
 	
