@@ -3,9 +3,7 @@ package projetofinal.so;
 import java.util.logging.Logger;
 
 import projetofinal.so.arquivos.Disco;
-import projetofinal.so.arquivos.GerenciaArquivo;
 import projetofinal.so.dados.LeituraArquivoException;
-import projetofinal.so.dados.processo.ListaProcesso;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
 import projetofinal.so.memoria.GerenciaMemoria;
@@ -21,8 +19,14 @@ import projetofinal.so.recursos.GerenciaRecurso;
 public class Dispatcher{
 
 	public static final int QUANTUM = 1;
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static Logger LOGGER = null;
 	private static Dispatcher instancia;
+	
+	static {
+	      System.setProperty("java.util.logging.SimpleFormatter.format",
+	              "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
+	}
 	
 	private MemoriaRAM memoriaDoPC;
 	private BancoDeProcessos meusProcessos;
