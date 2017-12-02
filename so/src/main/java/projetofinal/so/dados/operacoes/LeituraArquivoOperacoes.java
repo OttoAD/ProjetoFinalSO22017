@@ -93,7 +93,7 @@ public class LeituraArquivoOperacoes {
 			String[] elementosLeitura = leituraArquivos.split(", ");
 			Arquivo arq = new Arquivo();
 			
-			arq.setNomeArquivo(elementosLeitura[0]);
+			arq.setNomeArquivo(elementosLeitura[0].charAt(0));
 			arq.setNumeroBloco(Integer.parseInt(elementosLeitura[1]));
 			arq.setTamanho(Integer.parseInt(elementosLeitura[2]));
 			
@@ -113,9 +113,9 @@ public class LeituraArquivoOperacoes {
 			op.setIdProcesso(Integer.parseInt(elementosLeitura[0]));
 			int criarOuDeletar = Integer.parseInt(elementosLeitura[1]);
 			op.setCodigoOperacao(criarOuDeletar);
-			op.setNomeArquivo(elementosLeitura[2]);
+			op.setNomeArquivo(elementosLeitura[2].charAt(0));
 			if(criarOuDeletar == 0) {
-				op.setNumeroBlocos(Integer.parseInt(elementosLeitura[3]));
+				op.setTamanho(Integer.parseInt(elementosLeitura[3]));
 			}
 			return op;
 		}else {

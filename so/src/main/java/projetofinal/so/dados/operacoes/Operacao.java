@@ -7,8 +7,15 @@ public class Operacao {
 	
 	private int idProcesso;
 	private int codigoOperacao;
-	private String nomeArquivo;
-	private int numeroBlocos;
+	private char nomeArquivo;
+	private int tamanho;
+	
+	public Operacao() {
+		this.idProcesso = -1;
+		this.codigoOperacao = -1;
+		this.nomeArquivo = '\0';
+		this.tamanho = 0;
+	}
 	
 	public int getIdProcesso() {
 		return idProcesso;
@@ -22,17 +29,17 @@ public class Operacao {
 	public void setCodigoOperacao(int codigoOperacao) {
 		this.codigoOperacao = codigoOperacao;
 	}
-	public String getNomeArquivo() {
-		return this.nomeArquivo;
+	public int getTamanho() {
+		return tamanho;
 	}
-	public void setNomeArquivo(String nomeArquivo) {
+	public void setTamanho(int tamanho) {
+		this.tamanho = tamanho;
+	}
+	public char getNomeArquivo() {
+		return nomeArquivo;
+	}
+	public void setNomeArquivo(char nomeArquivo) {
 		this.nomeArquivo = nomeArquivo;
-	}
-	public int getNumeroBlocos() {
-		return numeroBlocos;
-	}
-	public void setNumeroBlocos(int numeroBlocos) {
-		this.numeroBlocos = numeroBlocos;
 	}
 	
 }

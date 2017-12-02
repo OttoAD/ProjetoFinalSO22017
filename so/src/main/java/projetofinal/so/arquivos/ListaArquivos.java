@@ -22,12 +22,12 @@ public class ListaArquivos {
 		}
 	}
 	
-	public Arquivo getArquivoPorNome(String nomeArquivo) throws ArquivoInexistenteException{
+	public Arquivo getArquivoPorNome(char nomeArquivo) throws ArquivoInexistenteException{
 		Arquivo arq = null;
 		if(!listaVazia()) {
 			for(int indice = 0; indice < this.lista.size(); indice++) {
 				arq = this.lista.get(indice);
-				if(arq.getNomeArquivo().equals(nomeArquivo)) {
+				if(arq.getNomeArquivo() == nomeArquivo) {
 					return arq;
 				}
 			}

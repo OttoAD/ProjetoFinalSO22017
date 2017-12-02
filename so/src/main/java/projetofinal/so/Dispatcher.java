@@ -36,7 +36,7 @@ public class Dispatcher{
 		try {
 		this.memoriaDoPC = new GerenciaMemoria();
 		this.meusProcessos = new GerenciaProcesso();
-		this.gerenciadorArquivo = new GerenciaArquivo();
+		//this.gerenciadorArquivo = new GerenciaArquivo();
 		this.escalonador = new GerenciaFila();
 		this.gerenciadorRecurso = new GerenciaRecurso();
 		}catch(LeituraArquivoException lae) {
@@ -130,18 +130,21 @@ public class Dispatcher{
 				clock += run(processo);
 				if (processo.getTempoProcessador() == 0) { //esgotou o processo
 					//TODO: TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO - usar gerenciaArquivos.fazTudo(processo) ou algo assim
+					//gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
+					//gerenciadorArquivo.mostrarDisco();
 					memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
 					gerenciadorRecurso.freeRecursos(processo);
 					System.out.println("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
 					memoriaDoPC.mostrarMemoria();
-					
 					
 				} else { //mais 'Quantum's serão necessarios
 					escalonador.diminuirPrioridade(processo);
 				}
 			}
 			else {
-				LOGGER.info("PROCESSO BLOQUEADO");
+				LOGGER.info("Processo "+processo.getID()+" bloqueado por falta de recursos");
+				gerenciadorRecurso.mostraRecursos();
+				escalonador.diminuirPrioridade(processo); //decai prioridade para ser executado após o processo que pegou o recurso anteriormente
 				//processo está bloqueado por falta de recursos
 				//TODO: LIDAR COM BLOQUEIO
 			}

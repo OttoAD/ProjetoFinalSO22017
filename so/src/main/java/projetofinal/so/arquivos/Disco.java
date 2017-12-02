@@ -6,14 +6,14 @@ import projetofinal.so.dados.operacoes.Operacao;
 
 public interface Disco {
 	
-	public ArrayList<Operacao> getOperacoesProcesso(int idProcesso);
-	
-	public void removerArquivo(int idProcesso, Arquivo arq);//deletar um arquivo do disco
+	void removerArquivo(int idProcessoChamador, int prioridadeProcesso, Arquivo arq) throws PermissaoNegadaException ;//deletar um arquivo do disco
 
-	public void criarArquivo(int idProcesso, Arquivo arq);//criar um arquivo no disco
-	
-	public void buscarArquivo(); //tem que ver o retorno e os parametros
+	public void criarArquivo(int idProcesso, Arquivo arq) throws EspacoDiscoInsuficienteException;//criar um arquivo no disco
 
-	//void mostrarDisco(); //mostrar disco na tela
+	void mostrarDisco(); //mostrar disco na tela
+	
+	public int espacoEmDisco (int quantidadeBlocos); //Procura uma a primeira sequencia de X blocos livres sequenciais no disco e retorna o a posicao inicial
+
+	public void executaOperacoesProcesso(int id) throws EspacoDiscoInsuficienteException;
 
 }
