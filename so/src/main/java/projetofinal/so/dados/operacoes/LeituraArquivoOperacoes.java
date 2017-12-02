@@ -87,19 +87,40 @@ public class LeituraArquivoOperacoes {
 		return listaTemporaria;
 	}
 	
-	//TODO
-	private Arquivo parseStringArquivo(String leituraArquivos) {
-		Arquivo arq = new Arquivo();
-				
-		return arq;
+
+	private Arquivo parseStringArquivo(String leituraArquivos) throws LeituraArquivoException {
+		if(leituraArquivos != null) {
+			String[] elementosLeitura = leituraArquivos.split(", ");
+			Arquivo arq = new Arquivo();
+			
+			arq.setNomeArquivo(elementosLeitura[0]);
+			arq.setNumeroBloco(Integer.parseInt(elementosLeitura[1]));
+			arq.setTamanho(Integer.parseInt(elementosLeitura[2]));
+			
+			return arq;
+		}else {
+			throw new LeituraArquivoException("Não se pode realizar parsing de string nula");
+		}
 	}
 	
-	//TODO
-	private Operacao parseStringOperacao(String leituraOperacoes) {
-		Operacao op = new Operacao();
-				
+	
+	private Operacao parseStringOperacao(String leituraOperacoes) throws LeituraArquivoException {
 		
-		return op;
+		if(leituraOperacoes != null) {
+			String[] elementosLeitura = leituraOperacoes.split(", ");
+			Operacao op = new Operacao();
+			
+			op.setIdProcesso(Integer.parseInt(elementosLeitura[0]));
+			int criarOuDeletar = Integer.parseInt(elementosLeitura[1]);
+			op.setCodigoOperacao(criarOuDeletar);
+			op.setNomeArquivo(elementosLeitura[2]);
+			if(criarOuDeletar == 0) {
+				op.setNumeroBlocos(Integer.parseInt(elementosLeitura[3]));
+			}
+			return op;
+		}else {
+			throw new LeituraArquivoException("Não se pode realizar parsing de string nula");
+		}
 	}
 	
 	

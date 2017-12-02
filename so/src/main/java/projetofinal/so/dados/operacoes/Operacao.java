@@ -7,7 +7,7 @@ public class Operacao {
 	
 	private int idProcesso;
 	private int codigoOperacao;
-	private int nomeArquivo;
+	private String nomeArquivo;
 	private int numeroBlocos;
 	
 	public int getIdProcesso() {
@@ -22,10 +22,10 @@ public class Operacao {
 	public void setCodigoOperacao(int codigoOperacao) {
 		this.codigoOperacao = codigoOperacao;
 	}
-	public int getNomeArquivo() {
-		return nomeArquivo;
+	public String getNomeArquivo() {
+		return this.nomeArquivo;
 	}
-	public void setNomeArquivo(int nomeArquivo) {
+	public void setNomeArquivo(String nomeArquivo) {
 		this.nomeArquivo = nomeArquivo;
 	}
 	public int getNumeroBlocos() {

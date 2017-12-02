@@ -55,10 +55,6 @@ public class Dispatcher{
 		return instancia;
 	}
 	
-	public void novosProcessos(ListaProcesso processos) {
-		this.meusProcessos = new GerenciaProcesso(processos);
-	}
-	
 	public void executarProcessos() {
 		clock = 0;
 		
