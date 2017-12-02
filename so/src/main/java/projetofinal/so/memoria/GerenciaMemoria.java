@@ -11,12 +11,12 @@ public class GerenciaMemoria implements MemoriaRAM {
 	}
 	
 	public void mostrarMemoria () {
-		char[] memReal = memoria.getMemReal();
-		char[] memUser = memoria.getMemUsuario();
+		int[] memReal = memoria.getMemReal();
+		int[] memUser = memoria.getMemUsuario();
 		String mostrarReal = "[";
 		String mostrarUsuario = "[";
 		
-		for (char i : memReal) {
+		for (int i : memReal) {
 			mostrarReal += (i+"|");
 		}
 		mostrarReal = mostrarReal.substring(0, mostrarReal.length()-1); //remover ultimo char
@@ -24,7 +24,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 		System.out.println("Memoria de tempo real");
 		System.out.println(mostrarReal);
 		
-		for (char i : memUser) {
+		for (int i : memUser) {
 			mostrarUsuario += (i+"|");
 		}
 		mostrarUsuario = mostrarUsuario.substring(0, (mostrarUsuario.length()-1)); //remover ultimo char
@@ -37,7 +37,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 	 * Retorna a posição incial da sequencia no vetor de memoria */
 	public int encontraMemoria (int quantidadeBlocos, int prioridade) throws MemoriaInsuficienteException{
 		
-		char[] memAtual = null;
+		int[] memAtual = null;
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
 			if (quantidadeBlocos > 64) { //usa mais que o disponivel na memoria de tempo real
 				throw new MemoriaInsuficienteException("Nao há memória de tempo real suficiente em hardware para o processo.");
@@ -54,7 +54,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 		int blCorrente = 0;
 		int nVazios = 0;
 		while (blCorrente < memAtual.length) { //percorre toda a memoria buscando alocacao
-			if (memAtual[blCorrente] == 'X') { //bloco de memoria livre
+			if (memAtual[blCorrente] == -1) { //bloco de memoria livre
 				nVazios++;
 				if (nVazios == quantidadeBlocos) { //encontrado o 'First Fit'
 					return (blCorrente-nVazios+1); //retorna a posicao inicial do vetor de blocos livres
@@ -74,7 +74,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 	
 	/* Aloca 'tamanhoBloco' espacos de memoria a partir de uma posicao inicial do vetor
 	 * Tais espacos serao atribuidos ao processoID */
-	public void alocaMemoria (char processoID, int posicaoInicial, int tamanhoBloco, int prioridade) { 
+	public void alocaMemoria (int processoID, int posicaoInicial, int tamanhoBloco, int prioridade) { 
 		
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
 			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1);
@@ -85,14 +85,14 @@ public class GerenciaMemoria implements MemoriaRAM {
 	}
 	
 	
-	public boolean desalocarProcesso(char processoID, int prioridade) {
+	public boolean desalocarProcesso(int processoID, int prioridade) {
 		
-		char[] memAtual = null;
+		int[] memAtual = null;
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
 			memAtual = memoria.getMemReal(); //obtem o estado atual da memoria de tempo real
 			for (int i = 0; i < memAtual.length; i++) { //percorre toda a memoria
 				if (memAtual[i] == processoID)
-					memoria.setMemReal('X', i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
+					memoria.setMemReal(-1, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
 			}
 			return true;
 		}
@@ -100,7 +100,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 			memAtual = memoria.getMemUsuario(); //obtem o estado atual da memoria de usuario
 			for (int i = 0; i < memAtual.length; i++) { //percorre toda a memoria
 				if (memAtual[i] == processoID)
-					memoria.setMemUsuario('X', i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
+					memoria.setMemUsuario(-1, i); //Define processo 'processoID' para os 'quantidadeBlocos' blocos de memoria, onde o bloco corrente eh o ultimo deles
 			}
 			return true;
 		}

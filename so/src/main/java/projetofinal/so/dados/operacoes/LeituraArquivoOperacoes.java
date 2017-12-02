@@ -66,7 +66,7 @@ public class LeituraArquivoOperacoes {
 
 	public ListaOperacoes lerOperacoes() throws LeituraArquivoException { // tem que testar
 		String leituraOperacoes = null;
-		int contador = this.numeroSegmentos + 3;
+		int contador = this.numeroSegmentos + 2;
 		ListaOperacoes listaTemporaria = new ListaOperacoes();
 		try(BufferedReader bufferArquivo = new BufferedReader(new FileReader(nomeArquivoEntrada))){
 			

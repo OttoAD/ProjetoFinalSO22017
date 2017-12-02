@@ -30,7 +30,7 @@ public class LeituraArquivoProcesso {
     	FileReader leitorArquivo = null;
     	BufferedReader bufferArquivo = null;
 		String leitura = null;
-		char contadorLinhas = '0'; //Jonas alterou para char pois o valor 'X' deve representar memoria livre
+		int contadorLinhas = 0; //Jonas alterou para char pois o valor 'X' deve representar memoria livre
 		ListaProcesso lista = new ListaProcesso();
 		Processo proc = null;
    		try {
@@ -46,7 +46,8 @@ public class LeituraArquivoProcesso {
 				contadorLinhas++;
 			}
 			
-			this.tamanhoArquivo = contadorLinhas - '0';
+			this.tamanhoArquivo = contadorLinhas;
+			//System.out.println("Tamanho final do arquivo de processos: "+this.tamanhoArquivo);
 			
 		} catch (FileNotFoundException fnf) {
 			throw new LeituraArquivoException("O arquivo " + nomeArquivoEntrada + " não pôde ser encontrado",fnf);
