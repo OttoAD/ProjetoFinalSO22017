@@ -55,6 +55,10 @@ public class GerenciaArquivo implements Disco{
 	public void criarArquivo(int idProcesso, Arquivo arq) {
 		// TODO Auto-generated method stub		
 	}
+	
+	public void mostrarDisco() {
+		// TODO Auto-generated method stub		
+	}
 
 	@Override
 	public void buscarArquivo() {

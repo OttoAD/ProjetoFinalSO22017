@@ -14,4 +14,6 @@ public interface Disco {
 	
 	public void buscarArquivo(); //tem que ver o retorno e os parametros
 
+	//void mostrarDisco(); //mostrar disco na tela
+
 }
