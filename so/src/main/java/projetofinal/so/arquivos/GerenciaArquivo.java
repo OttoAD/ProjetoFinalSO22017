@@ -152,7 +152,10 @@ public class GerenciaArquivo implements Disco {
 		System.out.println("---------- BLOCOS DO DISCO ----------");
 		System.out.print("[");
 		for (Arquivo arq : espacoDisco) {
-			System.out.print(arq.getNomeArquivo()+"|");
+			if (arq == null)
+				System.out.print(" |");
+			else
+				System.out.print(arq.getNomeArquivo()+"|");
 		}
 		System.out.println("]");
 		

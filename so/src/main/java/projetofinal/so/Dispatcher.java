@@ -36,7 +36,7 @@ public class Dispatcher{
 		try {
 		this.memoriaDoPC = new GerenciaMemoria();
 		this.meusProcessos = new GerenciaProcesso();
-		//this.gerenciadorArquivo = new GerenciaArquivo();
+		this.gerenciadorArquivo = new GerenciaArquivo();
 		this.escalonador = new GerenciaFila();
 		this.gerenciadorRecurso = new GerenciaRecurso();
 		}catch(LeituraArquivoException lae) {
@@ -129,7 +129,7 @@ public class Dispatcher{
 				/*EXECUTANDO PROCESSO QUE JA TEM TUDO QUE PRECISA*/
 				clock += run(processo);
 				if (processo.getTempoProcessador() == 0) { //esgotou o processo
-					//TODO: TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO - usar gerenciaArquivos.fazTudo(processo) ou algo assim
+
 					//gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
 					gerenciadorArquivo.mostrarDisco();
 					memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
