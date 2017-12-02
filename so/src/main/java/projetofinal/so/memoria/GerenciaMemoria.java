@@ -57,6 +57,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 			if (memAtual[blCorrente] == -1) { //bloco de memoria livre
 				nVazios++;
 				if (nVazios == quantidadeBlocos) { //encontrado o 'First Fit'
+					//System.out.println("A POSICAO INICIAL DO PROCESSO EH "+(blCorrente-nVazios+1));
 					return (blCorrente-nVazios+1); //retorna a posicao inicial do vetor de blocos livres
 				}
 			}
@@ -77,7 +78,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 	public void alocaMemoria (int processoID, int posicaoInicial, int tamanhoBloco, int prioridade) { 
 		
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
-			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1); //TODO: CONSERTAR ISSO PRA FICAR MENOS FEIO
+			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco); //TODO: CONSERTAR ISSO PRA FICAR MENOS FEIO
 		}
 		else { //processo de usuario
 			memoria.setMemUsuarioRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1);
