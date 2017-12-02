@@ -68,14 +68,12 @@ public class GerenciaArquivo implements Disco {
 	 * Retorna -1 se nao encontrar espaco*/	
 	private int firstFit (int quantidadeBlocos) {
 		int nVazios = 0;
-		int enderecoBaseBloco = 0;
 		
 		for (int blocoCorrente = 0; blocoCorrente < this.quantidadeBlocosDisco; blocoCorrente++) { //percorre o disco buscando espaço vazio
-			if (espacoDisco[blocoCorrente] == null) { //bloco de disco livre
-				enderecoBaseBloco = blocoCorrente;
+			if (espacoDisco[blocoCorrente] == null) { //bloco de disco livre 
 				nVazios++;
 				if (nVazios == quantidadeBlocos) { //encontrou um espaço que cabe o arquivo
-					return (enderecoBaseBloco - nVazios); //retorna a posicao inicial do vetor de blocos livres
+					return (blocoCorrente - nVazios + 1); //retorna a posicao onde o novo bloco começa
 				}
 			}
 			else { //bloco ocupado; reiniciar contagem
@@ -105,7 +103,7 @@ public class GerenciaArquivo implements Disco {
 	
 	public Arquivo buscarArquivoDisco(char nomeArquivo) throws ArquivoInexistenteException{
 			for (Arquivo arq : espacoDisco) {
-			if(arq.getNomeArquivo() == nomeArquivo) {
+			if(arq != null && arq.getNomeArquivo() == nomeArquivo) {
 				return arq;
 			}
 		}
@@ -119,7 +117,7 @@ public class GerenciaArquivo implements Disco {
 		int bloco = arq.getNumeroBloco();
 		int tamanho = arq.getTamanho();
 		
-		if ((idProcessoChamador == 0) || (idProcessoChamador == arq.getProcessoDono())) {
+		if ((prioridadeProcesso == 0) || (idProcessoChamador == arq.getProcessoDono())) {
 			for(int i = bloco ; i < (bloco+tamanho) ; i++) {
 				this.espacoDisco[i] = null;
 			}
@@ -129,7 +127,7 @@ public class GerenciaArquivo implements Disco {
 	}
 	
 	//TEM QUE REVER ESSA FUNÇÃO
-	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) throws EspacoDiscoInsuficienteException, PermissaoNegadaException, ArquivoInexistenteException, OperacaoInexistenteException {
+	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) throws OperacaoInexistenteException {
 		ArrayList<Operacao> toExecute = operacoes.getOperacoesProcesso(idProcesso);
 		char nomeArquivo;
 		
@@ -137,10 +135,21 @@ public class GerenciaArquivo implements Disco {
 			int acao = operacao.getCodigoOperacao();
 			nomeArquivo = operacao.getNomeArquivo();
 			if (acao == 0) { //criacao de arquivo
-				criarArquivo(idProcesso, new Arquivo(nomeArquivo,-1, operacao.getTamanho(), idProcesso));
+				try {
+					criarArquivo(idProcesso, new Arquivo(nomeArquivo,-1, operacao.getTamanho(), idProcesso));
+					System.out.println("Arquivo "+nomeArquivo+" criado com sucesso pelo processo "+idProcesso);
+				} catch (EspacoDiscoInsuficienteException e) {
+					System.out.println("A criação do arquivo "+nomeArquivo+" pelo processo "+idProcesso+" deu erro por falta de espaço em disco");
+				}
 			}
 			else if (acao == 1) { //remocao de arquivo
-				removerArquivo(idProcesso, prioridadeProcesso, nomeArquivo);
+				try {
+					removerArquivo(idProcesso, prioridadeProcesso, nomeArquivo);
+				} catch (PermissaoNegadaException e) {
+					System.out.println("O processo "+idProcesso+" não possui permissão para deletar o arquivo "+nomeArquivo);
+				} catch (ArquivoInexistenteException e) {
+					System.out.println("O arquivo "+nomeArquivo+" não existe em disco: é impossível deletá-lo");
+				}
 			}
 			else {
 				throw new OperacaoInexistenteException("O código " + acao + " de operação é inválido");
@@ -150,9 +159,12 @@ public class GerenciaArquivo implements Disco {
 
 	public void mostrarDisco() {
 		System.out.println("---------- BLOCOS DO DISCO ----------");
-		System.out.print("[");
+		System.out.print("[|"); //pra ficar simetrico
 		for (Arquivo arq : espacoDisco) {
-			System.out.print(arq.getNomeArquivo()+"|");
+			if (arq == null)
+				System.out.print(" |");
+			else
+				System.out.print(arq.getNomeArquivo()+"|");
 		}
 		System.out.println("]");
 		
