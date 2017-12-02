@@ -7,9 +7,9 @@ public class Memoria {
 	
 	public Memoria() {
 		processosReal = new int[64]; //64 blocos de memoria de tempo real
-		setMemRealRange(-1, 0, 63);
+		setMemRealRange(-1, 0, 64);
 		processosUsuario = new int[960]; //960 blocos de memoria de usuario
-		setMemUsuarioRange(-1, 0, 959);
+		setMemUsuarioRange(-1, 0, 960);
 
 	}
 
@@ -31,7 +31,8 @@ public class Memoria {
 		processosReal[posicao] = i;
 	}
 	public void setMemRealRange(int processoID, int posicaoinicial, int posicaofinal) { //define um processo para uma sequ�ncia de blocos de memoria de processos em tempo real
-		for (int i = posicaoinicial; i <= posicaofinal; i++) {
+		for (int i = posicaoinicial; i < posicaofinal; i++) {
+			//System.out.println("Bloco "+i+" recebe processo "+processoID);
 			processosReal[i] = processoID;
 		}
 	}
@@ -40,7 +41,7 @@ public class Memoria {
 		processosUsuario[posicao] = i;
 	}
 	public void setMemUsuarioRange(int processoID, int posicaoinicial, int posicaofinal) { //define um processo para uma sequencia de blocos de memoria de processos de usuario
-		for (int i = posicaoinicial; i <= posicaofinal; i++) {
+		for (int i = posicaoinicial; i < posicaofinal; i++) {
 			processosUsuario[i] = processoID;
 		}
 	}

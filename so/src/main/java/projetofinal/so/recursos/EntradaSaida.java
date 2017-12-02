@@ -37,4 +37,7 @@ public interface EntradaSaida {
 	//libera todos os recursos já utilizados pelo processo
 	public void freeRecursos(Processo processo);
 
+	//mostra os recursos que estao ocupados
+	public void mostraRecursos();
+
 }

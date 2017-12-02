@@ -36,7 +36,7 @@ public class Dispatcher{
 		try {
 		this.memoriaDoPC = new GerenciaMemoria();
 		this.meusProcessos = new GerenciaProcesso();
-		this.gerenciadorArquivo = new GerenciaArquivo();
+		//this.gerenciadorArquivo = new GerenciaArquivo();
 		this.escalonador = new GerenciaFila();
 		this.gerenciadorRecurso = new GerenciaRecurso();
 		}catch(LeituraArquivoException lae) {
@@ -142,7 +142,9 @@ public class Dispatcher{
 				}
 			}
 			else {
-				LOGGER.info("PROCESSO BLOQUEADO");
+				LOGGER.info("Processo "+processo.getID()+" bloqueado por falta de recursos");
+				gerenciadorRecurso.mostraRecursos();
+				escalonador.diminuirPrioridade(processo); //decai prioridade para ser executado após o processo que pegou o recurso anteriormente
 				//processo está bloqueado por falta de recursos
 				//TODO: LIDAR COM BLOQUEIO
 			}

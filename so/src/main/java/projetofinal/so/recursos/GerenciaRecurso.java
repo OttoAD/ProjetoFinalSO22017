@@ -149,4 +149,19 @@ public class GerenciaRecurso implements EntradaSaida{
 				freeRecurso(i);						//liberar recurso
 		}
 	}
+
+	public void mostraRecursos() {
+		if (!recursoLivre(IMPRESSORA_1))
+			System.out.println("Impressora 1 está dedicada ao processo "+ recursos[IMPRESSORA_1].getProcessoProprietario().getID());
+		if (!recursoLivre(IMPRESSORA_2))
+			System.out.println("Impressora 2 está dedicada ao processo "+ recursos[IMPRESSORA_2].getProcessoProprietario().getID());
+		if (!recursoLivre(SCANNER))
+			System.out.println("Scanner está dedicado ao processo "+ recursos[SCANNER].getProcessoProprietario().getID());
+		if (!recursoLivre(MODEM))
+			System.out.println("Modem está dedicado ao processo "+ recursos[MODEM].getProcessoProprietario().getID());
+		if (!recursoLivre(SATA_1))
+			System.out.println("Disco SATA 1 está dedicado ao processo "+ recursos[SATA_1].getProcessoProprietario().getID());
+		if (!recursoLivre(SATA_2))
+			System.out.println("Disco SATA 2 está dedicada ao processo "+ recursos[SATA_2].getProcessoProprietario().getID());
+	}
 }
