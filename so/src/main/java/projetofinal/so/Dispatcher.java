@@ -22,8 +22,14 @@ import projetofinal.so.recursos.GerenciaRecurso;
 public class Dispatcher{
 
 	public static final int QUANTUM = 1;
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static Logger LOGGER = null;
 	private static Dispatcher instancia;
+	
+	static {
+	      System.setProperty("java.util.logging.SimpleFormatter.format",
+	              "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
+	}
 	
 	private MemoriaRAM memoriaDoPC;
 	private BancoDeProcessos meusProcessos;
@@ -60,7 +66,7 @@ public class Dispatcher{
 	public void executarProcessos() {
 		clock = 0;
 		
-		LOGGER.info("Cheguei aqui");
+		//LOGGER.info("Cheguei aqui");
 		gerenciadorArquivo.mostrarDisco();
 		
 		while(meusProcessos.temNovosProcessos() || !escalonador.vazio()) {
