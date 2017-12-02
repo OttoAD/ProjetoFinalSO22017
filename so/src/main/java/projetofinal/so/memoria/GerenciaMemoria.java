@@ -77,10 +77,10 @@ public class GerenciaMemoria implements MemoriaRAM {
 	public void alocaMemoria (int processoID, int posicaoInicial, int tamanhoBloco, int prioridade) { 
 		
 		if (prioridade == 0) { //processo de prioridade 0 define processo de tempo real
-			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1);
+			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1); //TODO: CONSERTAR ISSO PRA FICAR MENOS FEIO
 		}
 		else { //processo de usuario
-			memoria.setMemUsuarioRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco);
+			memoria.setMemUsuarioRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1);
 		}
 	}
 	
