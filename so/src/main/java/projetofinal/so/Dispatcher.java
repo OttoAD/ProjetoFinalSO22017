@@ -2,6 +2,7 @@ package projetofinal.so;
 
 import java.util.logging.Logger;
 
+import projetofinal.so.arquivos.Disco;
 import projetofinal.so.arquivos.GerenciaArquivo;
 import projetofinal.so.dados.LeituraArquivoException;
 import projetofinal.so.dados.processo.ListaProcesso;
@@ -25,7 +26,7 @@ public class Dispatcher{
 	
 	private MemoriaRAM memoriaDoPC;
 	private BancoDeProcessos meusProcessos;
-	private GerenciaArquivo gerenciadorArquivo;
+	private Disco gerenciadorArquivo;
 	private Escalonador escalonador;
 	private EntradaSaida gerenciadorRecurso;
 	
@@ -69,13 +70,8 @@ public class Dispatcher{
 			//ou processos no escalonador
 			LOGGER.info("Clock " + clock);
 			criarProcesso();
-			
 			executarProcesso();
-			
-		}
-		
-		//memoriaDoPC.mostrarMemoria();
-		
+		}	
 	}
 	
 	private void criarProcesso() {
@@ -105,7 +101,7 @@ public class Dispatcher{
 					continue;
 				}
 				
-				if (posicaoMemoria == -1) { //Não há memória disponível NO MOMENTO OTÁVIO, haverá um dia...
+				if (posicaoMemoria == -1) { //Não há memória disponível no momento, mas haverá posteriormente...
 					indiceProcesso++;
 					System.out.println("Memoria insuficiente para o processo " + processo.getID());
 					continue;
