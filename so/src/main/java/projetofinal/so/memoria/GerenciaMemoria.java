@@ -1,6 +1,17 @@
 package projetofinal.so.memoria;
 
+import java.util.logging.Logger;
+
+import projetofinal.so.Dispatcher;
+
 public class GerenciaMemoria implements MemoriaRAM {
+	
+	private static Logger LOGGER = null;
+	static {
+	      System.setProperty("java.util.logging.SimpleFormatter.format",
+	              "[%4$-7s] %5$s %n");
+	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
+	}
 	
 	private Memoria memoria; //Verificar como a memoria eh tratada pelo gerenciador; Primeiro palpite: objeto private do gerenciador
 	
@@ -21,16 +32,16 @@ public class GerenciaMemoria implements MemoriaRAM {
 		}
 		mostrarReal = mostrarReal.substring(0, mostrarReal.length()-1); //remover ultimo char
 		mostrarReal += "]";
-		System.out.println("Memoria de tempo real");
-		System.out.println(mostrarReal);
+		LOGGER.info("Memoria de tempo real");
+		LOGGER.info(mostrarReal);
 		
 		for (int i : memUser) {
 			mostrarUsuario += (i+"|");
 		}
 		mostrarUsuario = mostrarUsuario.substring(0, (mostrarUsuario.length()-1)); //remover ultimo char
 		mostrarUsuario += "]";
-		System.out.println("Memoria de usuário");
-		System.out.println(mostrarUsuario);
+		LOGGER.info("Memoria de usuário");
+		LOGGER.info(mostrarUsuario);
 	}
 	
 	/* Procura uma a primeira sequencia de X blocos livres sequenciais na memoria
@@ -57,7 +68,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 			if (memAtual[blCorrente] == -1) { //bloco de memoria livre
 				nVazios++;
 				if (nVazios == quantidadeBlocos) { //encontrado o 'First Fit'
-					//System.out.println("A POSICAO INICIAL DO PROCESSO EH "+(blCorrente-nVazios+1));
+					//LOGGER.info("A POSICAO INICIAL DO PROCESSO EH "+(blCorrente-nVazios+1));
 					return (blCorrente-nVazios+1); //retorna a posicao inicial do vetor de blocos livres
 				}
 			}

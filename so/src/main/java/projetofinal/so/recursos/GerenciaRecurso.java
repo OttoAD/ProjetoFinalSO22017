@@ -1,5 +1,8 @@
 package projetofinal.so.recursos;
 
+import java.util.logging.Logger;
+
+import projetofinal.so.Dispatcher;
 import projetofinal.so.processos.Processo;
 
 public class GerenciaRecurso implements EntradaSaida{
@@ -11,6 +14,14 @@ public class GerenciaRecurso implements EntradaSaida{
 	public static final int MODEM = 3;
 	public static final int SATA_1 = 4;
 	public static final int SATA_2 = 5;
+	
+	private static Logger LOGGER = null;
+	
+	static {
+	      System.setProperty("java.util.logging.SimpleFormatter.format",
+	              "[%4$-7s] %5$s %n");
+	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
+	}
 	
 	public GerenciaRecurso() {
 		recursos = new Recurso[6];
@@ -115,7 +126,7 @@ public class GerenciaRecurso implements EntradaSaida{
 		
 		/*Se chegou aqui, os recursos livres estão disponiveis*/
 		int processID = process.getID();
-		System.out.println("Processo "+processID+" recebeu os recursos necessários para sua execução");
+		LOGGER.info("Processo "+processID+" recebeu os recursos necessários para sua execução");
 		
 		if (process.getRequisicaoModem())
 			this.setRecursoToProcesso(MODEM, process); //atribui modem ao processo, se necessário
@@ -152,16 +163,16 @@ public class GerenciaRecurso implements EntradaSaida{
 
 	public void mostraRecursos() {
 		if (!recursoLivre(IMPRESSORA_1))
-			System.out.println("Impressora 1 está dedicada ao processo "+ recursos[IMPRESSORA_1].getProcessoProprietario().getID());
+			LOGGER.info("Impressora 1 está dedicada ao processo "+ recursos[IMPRESSORA_1].getProcessoProprietario().getID());
 		if (!recursoLivre(IMPRESSORA_2))
-			System.out.println("Impressora 2 está dedicada ao processo "+ recursos[IMPRESSORA_2].getProcessoProprietario().getID());
+			LOGGER.info("Impressora 2 está dedicada ao processo "+ recursos[IMPRESSORA_2].getProcessoProprietario().getID());
 		if (!recursoLivre(SCANNER))
-			System.out.println("Scanner está dedicado ao processo "+ recursos[SCANNER].getProcessoProprietario().getID());
+			LOGGER.info("Scanner está dedicado ao processo "+ recursos[SCANNER].getProcessoProprietario().getID());
 		if (!recursoLivre(MODEM))
-			System.out.println("Modem está dedicado ao processo "+ recursos[MODEM].getProcessoProprietario().getID());
+			LOGGER.info("Modem está dedicado ao processo "+ recursos[MODEM].getProcessoProprietario().getID());
 		if (!recursoLivre(SATA_1))
-			System.out.println("Disco SATA 1 está dedicado ao processo "+ recursos[SATA_1].getProcessoProprietario().getID());
+			LOGGER.info("Disco SATA 1 está dedicado ao processo "+ recursos[SATA_1].getProcessoProprietario().getID());
 		if (!recursoLivre(SATA_2))
-			System.out.println("Disco SATA 2 está dedicada ao processo "+ recursos[SATA_2].getProcessoProprietario().getID());
+			LOGGER.info("Disco SATA 2 está dedicada ao processo "+ recursos[SATA_2].getProcessoProprietario().getID());
 	}
 }

@@ -3,6 +3,7 @@ package projetofinal.so;
 import java.util.logging.Logger;
 
 import projetofinal.so.arquivos.Disco;
+import projetofinal.so.arquivos.GerenciaArquivo;
 import projetofinal.so.dados.LeituraArquivoException;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
@@ -24,7 +25,7 @@ public class Dispatcher{
 	
 	static {
 	      System.setProperty("java.util.logging.SimpleFormatter.format",
-	              "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+	              "[%4$-7s] %5$s %n");
 	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
 	}
 	
@@ -40,7 +41,7 @@ public class Dispatcher{
 		try {
 		this.memoriaDoPC = new GerenciaMemoria();
 		this.meusProcessos = new GerenciaProcesso();
-		//this.gerenciadorArquivo = new GerenciaArquivo();
+		this.gerenciadorArquivo = new GerenciaArquivo();
 		this.escalonador = new GerenciaFila();
 		this.gerenciadorRecurso = new GerenciaRecurso();
 		}catch(LeituraArquivoException lae) {
@@ -85,11 +86,11 @@ public class Dispatcher{
 			
 			if (processo != null) {
 				
-				System.out.println("Criando o processo " + processo.getID());
+				LOGGER.info("Criando o processo " + processo.getID());
 				try {
 					posicaoMemoria = memoriaDoPC.encontraMemoria(processo.getBlocosMemoria(), processo.getPrioridade());
 				} catch (MemoriaInsuficienteException e) {
-					System.out.println("Erro - Memória pequena demais para o processo " + processo.getID());
+					LOGGER.warning("Erro - Memória pequena demais para o processo " + processo.getID());
 					try {
 						meusProcessos.excluirProcesso(processo);						
 					} catch (ProcessoInexistenteException e2) {
@@ -102,7 +103,7 @@ public class Dispatcher{
 				
 				if (posicaoMemoria == -1) { //Não há memória disponível no momento, mas haverá posteriormente...
 					indiceProcesso++;
-					System.out.println("Memoria insuficiente para o processo " + processo.getID());
+					LOGGER.warning("Memoria insuficiente para o processo " + processo.getID());
 					continue;
 				}
 				
@@ -123,6 +124,7 @@ public class Dispatcher{
 	}
 
 	private void executarProcesso() {
+		
 		Processo processo;
 		
 		processo = escalonador.proximoProcesso(); //tira processo da fila do escalonador
@@ -132,13 +134,13 @@ public class Dispatcher{
 			if (gerenciadorRecurso.possuiRecursos(processo) || gerenciadorRecurso.reservaRecursos(processo)) {
 				/*EXECUTANDO PROCESSO QUE JA TEM TUDO QUE PRECISA*/
 				clock += run(processo);
-				if (processo.getTempoProcessador() == 0) { //esgotou o processo
+				if (processo.getTempoRestante() == 0) { //esgotou o processo
 					//TODO: TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO - usar gerenciaArquivos.fazTudo(processo) ou algo assim
 					//gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
-					gerenciadorArquivo.mostrarDisco();
+					//gerenciadorArquivo.mostrarDisco();
 					memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
 					gerenciadorRecurso.freeRecursos(processo);
-					System.out.println("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
+					LOGGER.info("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
 					memoriaDoPC.mostrarMemoria();
 					
 				} else { //mais 'Quantum's serão necessarios
@@ -159,17 +161,44 @@ public class Dispatcher{
 	}
 
 	public int run(Processo processo) {
+		
+		int tempoRestante = processo.getTempoRestante();
+		int tempoExecutado;
 		int tempoTotal = processo.getTempoProcessador();
-		if (processo.getPrioridade() == 0) {
-			processo.setTempoProcessador(0);
-			System.out.println("Processo "+processo.getID()+ " finalizado após "+tempoTotal+ " unidades de tempo");
-			return tempoTotal;
-		} else {
-			int tempoExecutado = tempoTotal <= QUANTUM ? tempoTotal : QUANTUM; //executa durante o minimo entre restante e QUANTUM 
-			processo.setTempoProcessador(tempoTotal-tempoExecutado); //atualiza o tempo restante
-			System.out.println("Processo "+processo.getID()+ " possui "+tempoTotal+ " unidades de tempo restantes");
-			return tempoExecutado;
+		
+		System.out.println("\nProcess " + processo.getID() + " ->");
+		
+		LOGGER.info("Processo " + processo.getID() + " tempoProcessador " + processo.getTempoProcessador() + " tempoRestante " + processo.getTempoRestante());
+		
+		// Se é a primeira execução imprime o sinal de início
+		if (tempoRestante == tempoTotal) {
+			System.out.println("P" + processo.getID() + " STARTED");
 		}
+		
+		if (processo.getPrioridade() == 0) {
+			processo.setTempoRestante(0);
+			LOGGER.info("Processo " + processo.getID() + " finalizado após " + tempoRestante + " unidades de tempo");
+			tempoExecutado = tempoRestante;
+		} else {
+			tempoExecutado = tempoRestante <= QUANTUM ? tempoRestante : QUANTUM; //executa durante o minimo entre restante e QUANTUM 
+			tempoRestante -= tempoExecutado;
+			processo.setTempoRestante(tempoRestante); //atualiza o tempo restante
+			LOGGER.info("Processo "+processo.getID()+ " possui " + tempoRestante + " unidades de tempo restantes");
+		}
+		
+		tempoRestante = processo.getTempoRestante(); // Pegando o tempo restante antes da execução
+		
+		// Imprimindo as instruções que foram executadas
+		for (int i = 1; i <= tempoExecutado; i++) {
+			System.out.println("P" + processo.getID() + " instruction " + (tempoTotal - tempoRestante + i));
+		}
+		
+		// Se acabou o processo imprime o sinal de fim
+		if (processo.getTempoRestante() == 0) {
+			System.out.println("P" + processo.getID() + " return SIGINT");
+		}
+		
+		return tempoExecutado;
 	}
 	
 	private void printProcess(Processo process) {

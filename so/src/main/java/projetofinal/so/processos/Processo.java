@@ -6,6 +6,7 @@ public class Processo {
 	private int tempoInicializacao;
 	private int prioridade;
 	private int tempoProcessador;
+	private int tempoRestante;
 	private int blocosMemoria;
 	private int numeroCodigoImpressora;
 	private boolean requisicaoScanner;
@@ -17,6 +18,7 @@ public class Processo {
 		this.tempoInicializacao = 0;
 		this.prioridade = -1;
 		this.tempoProcessador = 0;
+		this.tempoRestante = this.tempoProcessador;
 		this.blocosMemoria = 0;
 		this.numeroCodigoImpressora = 0;
 		this.requisicaoScanner = false;
@@ -29,6 +31,7 @@ public class Processo {
 		this.tempoInicializacao = proc.getTempoInicializacao();
 		this.prioridade = proc.getPrioridade();
 		this.tempoProcessador = proc.getTempoProcessador();
+		this.tempoRestante = this.tempoProcessador;
 		this.blocosMemoria = proc.getBlocosMemoria();
 		this.numeroCodigoImpressora = proc.getNumeroCodigoImpressora();
 		this.requisicaoScanner = proc.getRequisicaoScanner();
@@ -110,6 +113,14 @@ public class Processo {
 
 	public void setID(int iD) {
 		this.iD = iD;
+	}
+
+	public int getTempoRestante() {
+		return tempoRestante;
+	}
+
+	public void setTempoRestante(int tempoRestante) {
+		this.tempoRestante = tempoRestante;
 	}
 	
 }
