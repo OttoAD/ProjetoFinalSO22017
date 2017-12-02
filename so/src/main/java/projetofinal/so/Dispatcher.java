@@ -1,9 +1,12 @@
 package projetofinal.so;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import projetofinal.so.arquivos.Disco;
+import projetofinal.so.arquivos.GerenciaArquivo;
 import projetofinal.so.dados.LeituraArquivoException;
+import projetofinal.so.dados.operacoes.OperacaoInexistenteException;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
 import projetofinal.so.memoria.GerenciaMemoria;
@@ -40,7 +43,7 @@ public class Dispatcher{
 		try {
 		this.memoriaDoPC = new GerenciaMemoria();
 		this.meusProcessos = new GerenciaProcesso();
-		//this.gerenciadorArquivo = new GerenciaArquivo();
+		this.gerenciadorArquivo = new GerenciaArquivo();
 		this.escalonador = new GerenciaFila();
 		this.gerenciadorRecurso = new GerenciaRecurso();
 		}catch(LeituraArquivoException lae) {
@@ -63,12 +66,13 @@ public class Dispatcher{
 	public void executarProcessos() {
 		clock = 0;
 		
-		LOGGER.info("Cheguei aqui");
+		//LOGGER.info("Cheguei aqui");
+		gerenciadorArquivo.mostrarDisco();
 		
 		while(meusProcessos.temNovosProcessos() || !escalonador.vazio()) {
 			//Verifica se tem processos para serem criados
 			//ou processos no escalonador
-			LOGGER.info("Clock " + clock);
+			//LOGGER.info("Clock " + clock);
 			criarProcesso();
 			executarProcesso();
 		}	
@@ -133,12 +137,17 @@ public class Dispatcher{
 				/*EXECUTANDO PROCESSO QUE JA TEM TUDO QUE PRECISA*/
 				clock += run(processo);
 				if (processo.getTempoProcessador() == 0) { //esgotou o processo
-					//TODO: TODAS AS OPERAÇÕES DE ARQUIVOS REFERENTES AO PROCESSO FINALIZADO - usar gerenciaArquivos.fazTudo(processo) ou algo assim
-					//gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
+
+					try {
+						gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
+					} catch (OperacaoInexistenteException excep) {
+						System.out.println("O processo tentou realizar uma operação inválida em arquivos");
+						LOGGER.log(Level.SEVERE, "O processo tentou realizar uma operação inválida em arquivos", excep);
+					}
+					
 					gerenciadorArquivo.mostrarDisco();
 					memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria
 					gerenciadorRecurso.freeRecursos(processo);
-					System.out.println("Processo "+processo.getID()+" finalizado no clock " +(clock-1)); //clock ja foi incrementado, decrementar para exibicao
 					memoriaDoPC.mostrarMemoria();
 					
 				} else { //mais 'Quantum's serão necessarios

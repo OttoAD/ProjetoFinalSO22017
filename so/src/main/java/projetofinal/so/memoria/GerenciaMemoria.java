@@ -81,7 +81,7 @@ public class GerenciaMemoria implements MemoriaRAM {
 			memoria.setMemRealRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco); //TODO: CONSERTAR ISSO PRA FICAR MENOS FEIO
 		}
 		else { //processo de usuario
-			memoria.setMemUsuarioRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco-1);
+			memoria.setMemUsuarioRange(processoID, posicaoInicial, posicaoInicial+tamanhoBloco);
 		}
 	}
 	
