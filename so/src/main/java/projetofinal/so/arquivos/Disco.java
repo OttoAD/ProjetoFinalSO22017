@@ -8,7 +8,7 @@ public interface Disco {
 	
 	public void removerArquivo(int idProcessoChamador, int prioridadeProcesso, char nomeArquivo) throws PermissaoNegadaException, ArquivoInexistenteException;
 	
-	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) throws EspacoDiscoInsuficienteException, PermissaoNegadaException, ArquivoInexistenteException, OperacaoInexistenteException;
+	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) throws OperacaoInexistenteException;
 	
 	public void mostrarDisco();
 
