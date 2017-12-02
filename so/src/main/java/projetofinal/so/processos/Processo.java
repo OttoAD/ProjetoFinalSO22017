@@ -1,5 +1,7 @@
 package projetofinal.so.processos;
 
+import projetofinal.so.filas.Escalonador;
+
 public class Processo {
 
 	private int iD;
@@ -12,6 +14,11 @@ public class Processo {
 	private boolean requisicaoScanner;
 	private boolean requisicaoModem;
 	private int numeroCodigoDisco;
+	private int estado;
+	private Escalonador escalonador;
+	
+	public static final int PRONTO = 0;
+	public static final int BLOQUEADO = 1;
 	
 	public Processo() {
 		this.iD = -1;
@@ -24,6 +31,8 @@ public class Processo {
 		this.requisicaoScanner = false;
 		this.requisicaoModem = false;
 		this.numeroCodigoDisco = 0;
+		this.estado = Processo.PRONTO;
+		this.escalonador = null;
 	}
 	
 	public Processo(Processo proc) {
@@ -37,6 +46,8 @@ public class Processo {
 		this.requisicaoScanner = proc.getRequisicaoScanner();
 		this.requisicaoModem = proc.getRequisicaoModem();
 		this.numeroCodigoDisco = proc.getNumeroCodigoDisco();
+		this.estado = proc.getEstado();
+		this.escalonador = proc.getEscalonador();
 	}
 
 	public int getTempoInicializacao() {
@@ -121,6 +132,36 @@ public class Processo {
 
 	public void setTempoRestante(int tempoRestante) {
 		this.tempoRestante = tempoRestante;
+	}
+
+	public int getEstado() {
+		return estado;
+	}
+
+	public void setEstado(int estado) {
+		this.estado = estado;
+		// Notificar o escalonador sobre a mudança de estado do processo
+		if (this.escalonador != null && this.estado != estado) {
+			switch (estado) {
+			case Processo.PRONTO:
+				this.escalonador.desbloquearProcesso(this);
+				this.escalonador.diminuirPrioridade(this);
+				break;
+			case Processo.BLOQUEADO:
+				this.escalonador.bloquearProcesso(this);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	public Escalonador getEscalonador() {
+		return escalonador;
+	}
+
+	public void setEscalonador(Escalonador escalonador) {
+		this.escalonador = escalonador;
 	}
 	
 }

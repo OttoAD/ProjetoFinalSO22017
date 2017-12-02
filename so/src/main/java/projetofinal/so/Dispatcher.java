@@ -22,14 +22,8 @@ import projetofinal.so.recursos.GerenciaRecurso;
 public class Dispatcher{
 
 	public static final int QUANTUM = 1;
-	private static Logger LOGGER = null;
+	private static Logger LOGGER = LogBuffer.getLogger();
 	private static Dispatcher instancia;
-	
-	static {
-	      System.setProperty("java.util.logging.SimpleFormatter.format",
-	              "[%4$-7s] %5$s %n");
-	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
-	}
 	
 	private MemoriaRAM memoriaDoPC;
 	private BancoDeProcessos meusProcessos;
@@ -159,9 +153,9 @@ public class Dispatcher{
 			else {
 				LOGGER.info("Processo "+processo.getID()+" bloqueado por falta de recursos");
 				gerenciadorRecurso.mostraRecursos();
-				escalonador.diminuirPrioridade(processo); //decai prioridade para ser executado após o processo que pegou o recurso anteriormente
 				//processo está bloqueado por falta de recursos
-				//TODO: LIDAR COM BLOQUEIO
+				processo.setEstado(Processo.BLOQUEADO);
+				System.out.println("\nProcesso " + processo.getID() + " bloqueado, recursos indisponíveis.");
 			}
 		}
 		else { //nenhum processo a ser executado
@@ -175,13 +169,13 @@ public class Dispatcher{
 		int tempoExecutado;
 		int tempoTotal = processo.getTempoProcessador();
 		
-		System.out.println("\nProcess " + processo.getID() + " ->");
+		System.out.println("\nExecução Processo " + processo.getID() + " ->");
 		
 		LOGGER.info("Processo " + processo.getID() + " tempoProcessador " + processo.getTempoProcessador() + " tempoRestante " + processo.getTempoRestante());
 		
 		// Se é a primeira execução imprime o sinal de início
 		if (tempoRestante == tempoTotal) {
-			System.out.println("P" + processo.getID() + " STARTED");
+			System.out.println("\tP" + processo.getID() + " STARTED");
 		}
 		
 		if (processo.getPrioridade() == 0) {
@@ -190,28 +184,26 @@ public class Dispatcher{
 			tempoExecutado = tempoRestante;
 		} else {
 			tempoExecutado = tempoRestante <= QUANTUM ? tempoRestante : QUANTUM; //executa durante o minimo entre restante e QUANTUM 
-			tempoRestante -= tempoExecutado;
-			processo.setTempoRestante(tempoRestante); //atualiza o tempo restante
-			LOGGER.info("Processo "+processo.getID()+ " possui " + tempoRestante + " unidades de tempo restantes");
+			int tempoQueSobrou = tempoRestante - tempoExecutado;
+			processo.setTempoRestante(tempoQueSobrou); //atualiza o tempo restante
+			LOGGER.info("Processo "+processo.getID()+ " possui " + tempoQueSobrou + " unidades de tempo restantes");
 		}
-		
-		tempoRestante = processo.getTempoRestante(); // Pegando o tempo restante antes da execução
 		
 		// Imprimindo as instruções que foram executadas
 		for (int i = 1; i <= tempoExecutado; i++) {
-			System.out.println("P" + processo.getID() + " instruction " + (tempoTotal - tempoRestante + i));
+			System.out.println("\tP" + processo.getID() + " instrução " + (tempoTotal - tempoRestante + i));
 		}
 		
 		// Se acabou o processo imprime o sinal de fim
 		if (processo.getTempoRestante() == 0) {
-			System.out.println("P" + processo.getID() + " return SIGINT");
+			System.out.println("\tP" + processo.getID() + " retornou SIGINT");
 		}
 		
 		return tempoExecutado;
 	}
 	
 	private void printProcess(Processo process) {
-		System.out.println("dispatcher =>");
+		System.out.println("\nCrição de processo ->");
 		System.out.println("\tPID: "+process.getID());
 		System.out.println("\tpriority: "+process.getPrioridade());
 		System.out.println("\ttime: "+process.getTempoProcessador());

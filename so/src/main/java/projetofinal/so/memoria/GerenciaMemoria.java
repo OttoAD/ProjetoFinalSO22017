@@ -2,16 +2,11 @@ package projetofinal.so.memoria;
 
 import java.util.logging.Logger;
 
-import projetofinal.so.Dispatcher;
+import projetofinal.so.LogBuffer;
 
 public class GerenciaMemoria implements MemoriaRAM {
 	
-	private static Logger LOGGER = null;
-	static {
-	      System.setProperty("java.util.logging.SimpleFormatter.format",
-	              "[%4$-7s] %5$s %n");
-	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
-	}
+	private static Logger LOGGER = LogBuffer.getLogger();
 	
 	private Memoria memoria; //Verificar como a memoria eh tratada pelo gerenciador; Primeiro palpite: objeto private do gerenciador
 	

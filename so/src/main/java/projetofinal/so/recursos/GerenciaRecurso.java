@@ -2,7 +2,7 @@ package projetofinal.so.recursos;
 
 import java.util.logging.Logger;
 
-import projetofinal.so.Dispatcher;
+import projetofinal.so.LogBuffer;
 import projetofinal.so.processos.Processo;
 
 public class GerenciaRecurso implements EntradaSaida{
@@ -15,13 +15,7 @@ public class GerenciaRecurso implements EntradaSaida{
 	public static final int SATA_1 = 4;
 	public static final int SATA_2 = 5;
 	
-	private static Logger LOGGER = null;
-	
-	static {
-	      System.setProperty("java.util.logging.SimpleFormatter.format",
-	              "[%4$-7s] %5$s %n");
-	      LOGGER = Logger.getLogger(Dispatcher.class.getName());
-	}
+	private static Logger LOGGER = LogBuffer.getLogger();
 	
 	public GerenciaRecurso() {
 		recursos = new Recurso[6];

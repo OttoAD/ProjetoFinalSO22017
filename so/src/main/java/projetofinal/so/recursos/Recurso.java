@@ -40,12 +40,14 @@ public class Recurso {
 		
 		if (!filaProcessos.isEmpty()) {
 			// Há processos esperando pelo recurso
-			for (Processo processo : filaProcessos) { //Percorre a partir do primeiro
+			for (Processo processo : filaProcessos) { // Percorre a partir do primeiro
+				// Verifica se os outros recursos requisitados estão disponíveis
 				if (gerenciaRecurso.recursosLivres(processo)) {
 					gerenciaRecurso.reservaRecursos(processo);
 					setProcessoProprietario(processo);
 					disponivel = false;
 					filaProcessos.remove(processo);
+					processo.setEstado(Processo.PRONTO);
 					break;
 				}
 			}

@@ -137,18 +137,18 @@ public class GerenciaArquivo implements Disco {
 			if (acao == 0) { //criacao de arquivo
 				try {
 					criarArquivo(idProcesso, new Arquivo(nomeArquivo,-1, operacao.getTamanho(), idProcesso));
-					System.out.println("Arquivo "+nomeArquivo+" criado com sucesso pelo processo "+idProcesso);
+					System.out.println("\nArquivo "+nomeArquivo+" criado com sucesso pelo processo "+idProcesso);
 				} catch (EspacoDiscoInsuficienteException e) {
-					System.out.println("A criação do arquivo "+nomeArquivo+" pelo processo "+idProcesso+" deu erro por falta de espaço em disco");
+					System.out.println("\nA criação do arquivo "+nomeArquivo+" pelo processo "+idProcesso+" deu erro por falta de espaço em disco");
 				}
 			}
 			else if (acao == 1) { //remocao de arquivo
 				try {
 					removerArquivo(idProcesso, prioridadeProcesso, nomeArquivo);
 				} catch (PermissaoNegadaException e) {
-					System.out.println("O processo "+idProcesso+" não possui permissão para deletar o arquivo "+nomeArquivo);
+					System.out.println("\nO processo "+idProcesso+" não possui permissão para deletar o arquivo "+nomeArquivo);
 				} catch (ArquivoInexistenteException e) {
-					System.out.println("O arquivo "+nomeArquivo+" não existe em disco: é impossível deletá-lo");
+					System.out.println("\nO arquivo "+nomeArquivo+" não existe em disco: é impossível deletá-lo");
 				}
 			}
 			else {
@@ -158,7 +158,7 @@ public class GerenciaArquivo implements Disco {
 	}
 
 	public void mostrarDisco() {
-		System.out.println("---------- BLOCOS DO DISCO ----------");
+		System.out.println("\n---------- BLOCOS DO DISCO ----------");
 		System.out.print("[|"); //pra ficar simetrico
 		for (Arquivo arq : espacoDisco) {
 			if (arq == null)

@@ -1,5 +1,8 @@
 package projetofinal.so.filas;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import projetofinal.so.processos.Processo;
 
 public class GerenciaFila implements Escalonador {
@@ -9,6 +12,7 @@ public class GerenciaFila implements Escalonador {
 	private Fila processosPrioridade1;
 	private Fila processosPrioridade2;
 	private Fila processosPrioridade3;
+	private List<Processo> processosBloqueados;
 	private int quantidade;
 	
 	public GerenciaFila() {
@@ -17,6 +21,7 @@ public class GerenciaFila implements Escalonador {
 		this.processosPrioridade1 = new Fila();
 		this.processosPrioridade2 = new Fila();
 		this.processosPrioridade3 = new Fila();
+		this.processosBloqueados = new ArrayList<>();
 	}
 	
 	public boolean vazio() {
@@ -67,5 +72,13 @@ public class GerenciaFila implements Escalonador {
 			}
 			escalonarProcesso(process);
 		}
+	}
+	
+	public void bloquearProcesso(Processo processo) {
+		processosBloqueados.add(processo);
+	}
+	
+	public void desbloquearProcesso(Processo processo) {
+		processosBloqueados.remove(processo);
 	}
 }

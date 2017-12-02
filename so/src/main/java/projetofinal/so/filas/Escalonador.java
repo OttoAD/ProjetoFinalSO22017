@@ -29,4 +29,13 @@ public interface Escalonador {
 		//utilizar process.prioridade para saber em que fila ele esta
 		//diminuir a prioridade e trocar de fila
 		
+	/*
+	 * Coloca o processo na lista de processos bloqueados
+	 */
+	public void bloquearProcesso(Processo processo);
+	
+	/*
+	 * Retira o processo da lista de processos bloqueados
+	 */
+	public void desbloquearProcesso(Processo processo);
 }

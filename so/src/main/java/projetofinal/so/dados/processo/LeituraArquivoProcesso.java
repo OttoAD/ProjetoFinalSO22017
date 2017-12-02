@@ -1,14 +1,12 @@
 package projetofinal.so.dados.processo;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import projetofinal.so.dados.LeituraArquivoException;
 import projetofinal.so.processos.Processo;
-import projetofinal.so.processos.ProcessoInexistenteException;
 
 public class LeituraArquivoProcesso {
 
@@ -78,6 +76,7 @@ public class LeituraArquivoProcesso {
 			processoTemporario.setTempoInicializacao(Integer.parseInt(elementosLeitura[0]));
 			processoTemporario.setPrioridade(Integer.parseInt(elementosLeitura[1]));
 			processoTemporario.setTempoProcessador(Integer.parseInt(elementosLeitura[2]));
+			processoTemporario.setTempoRestante(processoTemporario.getTempoProcessador());
 			processoTemporario.setBlocosMemoria(Integer.parseInt(elementosLeitura[3]));
 			processoTemporario.setNumeroCodigoImpressora(Integer.parseInt(elementosLeitura[4]));
 			processoTemporario.setRequisicaoScanner(Integer.parseInt(elementosLeitura[5]) == 0 ? false : true);
