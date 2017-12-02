@@ -10,14 +10,16 @@ import projetofinal.so.dados.operacoes.OperacaoInexistenteException;
 
 public class GerenciaArquivo implements Disco {
 	
-	/*espacoDisco tem que ser um array de arquivos para armazenar o dono de cada arquivo no proprio arquivo*/
+	/*espacoDisco tem que ser um vetor de arquivos para armazenar o dono de cada arquivo no proprio arquivo*/
 
 	public static final String NOMEARQUIVOOPERACOES = "files.txt";
 	private int quantidadeBlocosDisco;
 	private int quantidadeSegmentosOcupadosDisco;
 	private ListaArquivos arquivos;
 	private ListaOperacoes operacoes;
-	private char[] espacoDisco;
+	private Arquivo[] espacoDisco; //DESSE JEITO; VAI MUDAR TUDO MESMO
+	
+	
 	
 	public GerenciaArquivo() throws LeituraArquivoException{
 		LeituraArquivoOperacoes leitura = new LeituraArquivoOperacoes(NOMEARQUIVOOPERACOES);
