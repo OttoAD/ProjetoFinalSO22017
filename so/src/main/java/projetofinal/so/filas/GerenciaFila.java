@@ -30,6 +30,7 @@ public class GerenciaFila implements Escalonador {
 	
 	public void escalonarProcesso(Processo process) {
 		int prioridade = process.getPrioridade();
+		process.setEscalonador(this);
 		if(prioridade == 0) {
 			processosTempoReal.inserirProcesso(process);
 			this.quantidade++;

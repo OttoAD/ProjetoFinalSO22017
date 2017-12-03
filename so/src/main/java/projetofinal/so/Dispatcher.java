@@ -66,7 +66,7 @@ public class Dispatcher{
 		while(meusProcessos.temNovosProcessos() || !escalonador.vazio()) {
 			//Verifica se tem processos para serem criados
 			//ou processos no escalonador
-			//LOGGER.info("Clock " + clock);
+			LOGGER.info("Clock " + clock);
 			criarProcesso();
 			executarProcesso();
 		}	
@@ -150,11 +150,13 @@ public class Dispatcher{
 					escalonador.diminuirPrioridade(processo);
 				}
 			}
-			else {
-				LOGGER.info("Processo "+processo.getID()+" bloqueado por falta de recursos");
+			else { // Os recursos não estão disponíveis, o processo ficará bloqueado
+				LOGGER.info("Processo "+processo.getID()+" bloqueado por falta de recursos");				
 				gerenciadorRecurso.mostraRecursos();
-				//processo está bloqueado por falta de recursos
+				
+				gerenciadorRecurso.filaDeEspera(processo);
 				processo.setEstado(Processo.BLOQUEADO);
+				
 				System.out.println("\nProcesso " + processo.getID() + " bloqueado, recursos indisponíveis.");
 			}
 		}

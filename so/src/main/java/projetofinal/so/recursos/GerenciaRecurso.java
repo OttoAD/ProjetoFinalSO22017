@@ -86,6 +86,33 @@ public class GerenciaRecurso implements EntradaSaida{
 		return resultado; //ainda será true caso esteja tudo ok
 	}
 	
+	// Registra o processo na fila de espera dos recurso que ele precisa
+	public void filaDeEspera (Processo processo) {
+		if (processo.getRequisicaoModem())
+			recursos[MODEM].entrarNaEspera(processo);
+		
+		if (processo.getRequisicaoScanner())
+			recursos[SCANNER].entrarNaEspera(processo);
+
+		switch (processo.getNumeroCodigoImpressora()) {
+			case 1:
+				recursos[IMPRESSORA_1].entrarNaEspera(processo);
+				break;
+			case 2:
+				recursos[IMPRESSORA_2].entrarNaEspera(processo);
+				break;
+		}
+		
+		switch (processo.getNumeroCodigoDisco()) {
+			case 1:
+				recursos[SATA_1].entrarNaEspera(processo);
+				break;
+			case 2:
+				recursos[SATA_2].entrarNaEspera(processo);
+				break;
+		}		
+	}
+	
 	/*retorna true se o processo já possui todos os recursos que ele precisa*/
 	/*retorna false caso algum deles ainda não tenha sido reservado*/
 	/*OBS: Não verifica se está disponível, apenas se está reservado ou não*/

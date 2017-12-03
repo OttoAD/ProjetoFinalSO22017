@@ -40,4 +40,7 @@ public interface EntradaSaida {
 	//mostra os recursos que estao ocupados
 	public void mostraRecursos();
 
+	// Registra o processo na fila de espera dos recurso que ele precisa
+	public void filaDeEspera (Processo processo);
+
 }

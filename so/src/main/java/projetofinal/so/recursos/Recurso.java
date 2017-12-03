@@ -10,7 +10,6 @@ public class Recurso {
 	private LinkedList<Processo> filaProcessos = new LinkedList<Processo>();
 	private boolean disponivel;
 	private Processo processoProprietario;
-	private int tipoRecurso;
 	
 	public boolean disponivel() {
 		return this.disponivel;
@@ -19,7 +18,6 @@ public class Recurso {
 	public Recurso(EntradaSaida gerenciaRecurso, int tipoRecurso) {
 		this.gerenciaRecurso = gerenciaRecurso;
 		disponivel = true;
-		this.tipoRecurso = tipoRecurso;
 	}
 	
 	public boolean reservar(Processo processo) {
@@ -29,8 +27,13 @@ public class Recurso {
 			disponivel = false;
 			return true;
 		} else {
-			filaProcessos.addFirst(processo);
 			return false;
+		}
+	}
+	
+	public void entrarNaEspera(Processo processo) {
+		if (!filaProcessos.contains(processo)) {			
+			filaProcessos.addFirst(processo);
 		}
 	}
 	

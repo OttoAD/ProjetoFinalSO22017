@@ -1,8 +1,13 @@
 package projetofinal.so.processos;
 
+import java.util.logging.Logger;
+
+import projetofinal.so.LogBuffer;
 import projetofinal.so.filas.Escalonador;
 
 public class Processo {
+
+	private static Logger LOGGER = LogBuffer.getLogger();
 
 	private int iD;
 	private int tempoInicializacao;
@@ -139,9 +144,9 @@ public class Processo {
 	}
 
 	public void setEstado(int estado) {
-		this.estado = estado;
 		// Notificar o escalonador sobre a mudança de estado do processo
 		if (this.escalonador != null && this.estado != estado) {
+			LOGGER.info("Processo " + this.iD + " estado " + this.estado);
 			switch (estado) {
 			case Processo.PRONTO:
 				this.escalonador.desbloquearProcesso(this);
@@ -154,6 +159,8 @@ public class Processo {
 				break;
 			}
 		}
+		this.estado = estado;
+		LOGGER.info("Processo " + this.iD + " estado " + this.estado);
 	}
 
 	public Escalonador getEscalonador() {
