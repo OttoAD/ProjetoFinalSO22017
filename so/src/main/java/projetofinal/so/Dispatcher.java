@@ -94,7 +94,7 @@ public class Dispatcher{
 						e2.printStackTrace();
 					}
 					indiceProcesso++;
-					printProcess(processo);
+					//printProcess(processo);
 					continue;
 				}
 				

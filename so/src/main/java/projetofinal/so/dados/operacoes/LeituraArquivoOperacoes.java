@@ -1,12 +1,9 @@
 package projetofinal.so.dados.operacoes;
 
 import java.io.BufferedReader;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-import java.nio.file.Paths;
 
 import projetofinal.so.arquivos.Arquivo;
 import projetofinal.so.arquivos.ListaArquivos;

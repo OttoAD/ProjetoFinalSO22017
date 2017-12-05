@@ -3,7 +3,6 @@ package projetofinal.so.filas;
 import java.util.LinkedList;
 
 import projetofinal.so.processos.Processo;
-import projetofinal.so.processos.ProcessoInexistenteException;
 
 public class Fila {
 	
