@@ -14,7 +14,7 @@ public class InterfaceUsuario {
 			dispatcher.executarProcessos();
 	
     	
-    	System.out.println("Fim da execução");    	
+    	System.out.println("\nFim da execução");    	
     }
 	
 }

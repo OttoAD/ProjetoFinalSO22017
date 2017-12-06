@@ -14,6 +14,10 @@ public class ListaOperacoes {
 		this.lista.add(op);
 	}
 	
+	public void removerOperacao(Operacao op) {
+		lista.remove(op);
+	}
+	
 	public Operacao getOperacaoPorIndice(int indice) throws OperacaoInexistenteException{
 		try {
 			return lista.get(indice);
@@ -34,6 +38,26 @@ public class ListaOperacoes {
 			}
 		}
 		return operacoes;
+	}
+	
+	public void imprimirOperacoes() {
+		for (Operacao operacao : lista) {
+			if (operacao.getCodigoOperacao() == 0) {
+				System.out.println("\nOperação de escrita do processo "
+						+ operacao.getIdProcesso() + " no arquivo "
+						+ operacao.getNomeArquivo());
+			} else {
+				if (operacao.getCodigoOperacao() == 1) {
+					System.out.println("\nOperação de remoção do processo "
+							+ operacao.getIdProcesso() + " no arquivo "
+							+ operacao.getNomeArquivo());
+				} else {
+					System.out.println("\nOperação inválida do processo "
+							+ operacao.getIdProcesso() + " no arquivo "
+							+ operacao.getNomeArquivo());
+				}
+			}
+		}
 	}
 	
 	public boolean listaVazia() {

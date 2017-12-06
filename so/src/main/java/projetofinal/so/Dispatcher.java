@@ -1,12 +1,10 @@
 package projetofinal.so;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import projetofinal.so.arquivos.Disco;
 import projetofinal.so.arquivos.GerenciaArquivo;
 import projetofinal.so.dados.LeituraArquivoException;
-import projetofinal.so.dados.operacoes.OperacaoInexistenteException;
 import projetofinal.so.filas.Escalonador;
 import projetofinal.so.filas.GerenciaFila;
 import projetofinal.so.memoria.GerenciaMemoria;
@@ -69,7 +67,8 @@ public class Dispatcher{
 			LOGGER.info("Clock " + clock);
 			criarProcesso();
 			executarProcesso();
-		}	
+		}
+		gerenciadorArquivo.imprimirNaoExecutadas();
 	}
 	
 	private void criarProcesso() {
@@ -134,12 +133,7 @@ public class Dispatcher{
 
 				if (processo.getTempoRestante() == 0) { //esgotou o processo
 
-					try {
-						gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
-					} catch (OperacaoInexistenteException excep) {
-						System.out.println("O processo tentou realizar uma operação inválida em arquivos");
-						LOGGER.log(Level.SEVERE, "O processo tentou realizar uma operação inválida em arquivos", excep);
-					}
+					gerenciadorArquivo.executaOperacoesProcesso(processo.getID(), processo.getPrioridade());
 					
 					gerenciadorArquivo.mostrarDisco();
 					memoriaDoPC.desalocarProcesso(processo.getID(), processo.getPrioridade()); //desaloca processo da memoria

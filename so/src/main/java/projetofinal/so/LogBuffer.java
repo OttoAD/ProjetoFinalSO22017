@@ -13,7 +13,8 @@ public class LogBuffer {
 		if (logger == null) {
 			System.setProperty("java.util.logging.SimpleFormatter.format", "[%4$-7s] %5$s %n");
 			logger = Logger.getLogger("DebugLog");
-			logger.setLevel(Level.ALL);
+			logger.setLevel(Level.OFF); // Modo Execução
+			//logger.setLevel(Level.ALL); // Modo Debug
 		}
 		return logger;
 	}

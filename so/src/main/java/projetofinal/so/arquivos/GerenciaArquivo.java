@@ -6,7 +6,6 @@ import projetofinal.so.dados.LeituraArquivoException;
 import projetofinal.so.dados.operacoes.LeituraArquivoOperacoes;
 import projetofinal.so.dados.operacoes.ListaOperacoes;
 import projetofinal.so.dados.operacoes.Operacao;
-import projetofinal.so.dados.operacoes.OperacaoInexistenteException;
 
 public class GerenciaArquivo implements Disco {
 	
@@ -127,7 +126,7 @@ public class GerenciaArquivo implements Disco {
 	}
 	
 	//TEM QUE REVER ESSA FUNÇÃO
-	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) throws OperacaoInexistenteException {
+	public void executaOperacoesProcesso(int idProcesso, int prioridadeProcesso) {
 		ArrayList<Operacao> toExecute = operacoes.getOperacoesProcesso(idProcesso);
 		char nomeArquivo;
 		
@@ -145,6 +144,7 @@ public class GerenciaArquivo implements Disco {
 			else if (acao == 1) { //remocao de arquivo
 				try {
 					removerArquivo(idProcesso, prioridadeProcesso, nomeArquivo);
+					System.out.println("\nArquivo "+nomeArquivo+" removido com sucesso pelo processo "+idProcesso);
 				} catch (PermissaoNegadaException e) {
 					System.out.println("\nO processo "+idProcesso+" não possui permissão para deletar o arquivo "+nomeArquivo);
 				} catch (ArquivoInexistenteException e) {
@@ -152,9 +152,16 @@ public class GerenciaArquivo implements Disco {
 				}
 			}
 			else {
-				throw new OperacaoInexistenteException("O código " + acao + " de operação é inválido");
+				operacoes.removerOperacao(operacao);
+				System.out.println("\nO código " + acao + " de operação é inválido");
 			}
+			operacoes.removerOperacao(operacao);
 		}
+	}
+	
+	public void imprimirNaoExecutadas() {
+		System.out.println("\nAs seguintes operações não foram executadas porque os processos correspondentes não existem:");
+		operacoes.imprimirOperacoes();
 	}
 
 	public void mostrarDisco() {
